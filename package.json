@@ -8,7 +8,7 @@
             "email": "raskolnikov@gnu.org"
         }
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "keywords": [
         "inheritance",
         "coffeescript",
@@ -39,7 +39,8 @@
     "files": [
         "mixco"
     ],
-    "main": [
+    "main": "lib/heterarchy.js",
+    "files": [
         "lib/heterarchy.js"
     ],
     "license": "GPL"
