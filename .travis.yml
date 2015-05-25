@@ -1,7 +1,14 @@
 language: node_js
 node_js:
-  - 0.10
+- 0.10
 before_script:
-  - npm install
+- npm install
 script:
-  - npm test
+- npm test
+deploy:
+  provider: npm
+  email: raskolnikov@gnu.org
+  api_key:
+    secure: MHS7FxAPj/uiwPIaQGh3t11jsac5+orApkvV9yM56gukdljg0qbZ/iXwucntdN2og2MqHj6/KbIAjFCcA/WzNS4OlXMvP2y0OW8hS6jwlc3v84xgSzP03D7P16Bz2+OTxt+CjTOsxKneFR9xYKpI10A/RM4gEZHz9Or0jzJBx4rPXEwX2n+AcLJ6DKO6PyGjTlXewADOpLup0D3FCWVTfc9eBQYEk4qkIoo9z9DonEWjj0gyPoMAOb4vOGlnW9SGlXVKrP8fr8IGrsQ+X26clqP6CRZ8KMvNddqaU3cbry14Hgtr1L95QsGw+KHYunXXdmstyOjrF4VLR2g/F4M4GtU6G2x//AgDExJV5J3d/gddzOEzmTH+u88TmQ7kcQpDXCwxtu8LJfKQZ+4jkJvon2CLOePNEo3TTAERhhwxYV5dlBp8RP0/RnUaBY6ARM3//DJwwvOuMcHeiMXhhzJOVwQW6iIuvPM7ddSE9RRyCU/Bf079pOdHAxYEwTgp2h2xjZorB9fmQj1NXmP65K7tqbxr1ZeE62NLTyNocpVNtuqYdlbpAHn220DO7D+hRXXqGnzZNoXSGb19naYPXzKJYLI/j/8XTGfylEFhK3sbb5E70aVP9AVOmpPVM12aoiFW44BenFaN7ZmGYCmLp6rXWXlptQC2bGk7fhg7WzFDZTc=
+  on:
+    tags: true
