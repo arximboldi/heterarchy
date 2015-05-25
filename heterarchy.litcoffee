@@ -1,15 +1,17 @@
-mixco.multi
-===========
+heterarchy
+==========
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
 Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
 
     {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
-     partial} =
+     partial, isEqual} =
         require 'underscore'
-    {assert} = require './util'
 
+    assert = (value, error=undefined) ->
+        if not value
+           throw new Error(if error? then error else "Assertion failed")
 
 Multiple inheritance
 --------------------
@@ -45,7 +47,7 @@ behaves like a class that would be have such a hierarchy.
 
     generate = memoize (linearization) ->
         next = head linearization
-        if linearization.equals hierarchy next
+        if isEqual linearization, hierarchy next
             next
         else
             class result extends generate tail linearization
