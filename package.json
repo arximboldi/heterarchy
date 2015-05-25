@@ -1,0 +1,46 @@
+{
+    "author": "Juan Pedro Bolivar Puente",
+    "name": "heterarchy",
+    "description": "Cooperative multiple inheritance for CoffeeScript, á-la Python",
+    "contributors": [
+        {
+            "name":  "Juan Pedro Bolivar Puente",
+            "email": "raskolnikov@gnu.org"
+        }
+    ],
+    "version": "1.0.0",
+    "keywords": [
+        "inheritance",
+        "coffeescript",
+        "coffee",
+        "mro",
+        "python"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/arximboldi/heterarchy"
+    },
+    "engines": {
+        "node": ">=0.10"
+    },
+    "dependencies": {
+        "underscore": ">=1.3.0",
+        "coffee-script": "latest"
+    },
+    "devDependencies": {
+        "jasmine-node": ">=1.0.26",
+        "docco": ">=0.6"
+    },
+    "scripts": {
+        "test": "make test",
+        "prepublish": "make",
+        "pretest": "make"
+    },
+    "files": [
+        "mixco"
+    ],
+    "main": [
+        "lib/heterarchy.js"
+    ],
+    "license": "GPL"
+}
