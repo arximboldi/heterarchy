@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="2in"
+   height="3in"
+   viewBox="932 696 2387 3568"
+   id="svg2">
+  <defs
+     id="defs39" />
+  <polyline
+     id="polyline6"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="1653,708 2598,708 2598,1417 1653,1417 1653,708 " />
+  <text
+     x="2124"
+     y="1228"
+     style="font-size:328px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;stroke:#000000;stroke-width:0.025in;font-family:Helvetica"
+     id="text8">A</text>
+  <polyline
+     id="polyline10"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="1653,3543 2598,3543 2598,4251 1653,4251 1653,3543 " />
+  <text
+     x="2124"
+     y="4062"
+     style="font-size:328px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;stroke:#000000;stroke-width:0.025in;font-family:Helvetica"
+     id="text12">D</text>
+  <polyline
+     id="polyline14"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2362,2125 3307,2125 3307,2834 2362,2834 2362,2125 " />
+  <text
+     x="2833"
+     y="2645"
+     style="font-size:328px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;stroke:#000000;stroke-width:0.025in;font-family:Helvetica"
+     id="text16">C</text>
+  <polyline
+     id="polyline18"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="944,2125 1889,2125 1889,2834 944,2834 944,2125 " />
+  <text
+     x="1416"
+     y="2645"
+     style="font-size:328px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;stroke:#000000;stroke-width:0.025in;font-family:Helvetica"
+     id="text20">B</text>
+  <polyline
+     id="polyline22"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="1417,2125 1732,1653 " />
+  <polygon
+     points="1796,1727 1875,1439 1638,1622 1796,1727 "
+     style="fill:#ffffff;stroke:#000000;stroke-width:16"
+     id="polygon24" />
+  <polyline
+     id="polyline26"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2362,3543 2677,3070 " />
+  <polygon
+     points="2741,3144 2819,2856 2583,3039 2741,3144 "
+     style="fill:#ffffff;stroke:#000000;stroke-width:16"
+     id="polygon28" />
+  <polyline
+     id="polyline30"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="1889,3543 1574,3070 " />
+  <polygon
+     points="1667,3039 1432,2856 1509,3144 1667,3039 "
+     style="fill:#ffffff;stroke:#000000;stroke-width:16"
+     id="polygon32" />
+  <polyline
+     id="polyline34"
+     style="fill:none;stroke:#000000;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter"
+     points="2834,2125 2519,1653 " />
+  <polygon
+     points="2612,1622 2376,1439 2454,1727 2612,1622 "
+     style="fill:#ffffff;stroke:#000000;stroke-width:16"
+     id="polygon36" />
+</svg>
