@@ -8,7 +8,7 @@
             "email": "raskolnikov@gnu.org"
         }
     ],
-    "version": "1.0.3",
+    "version": "1.0.4",
     "keywords": [
         "inheritance",
         "coffeescript",
@@ -43,5 +43,5 @@
     "files": [
         "lib/heterarchy.js"
     ],
-    "license": "GPL"
+    "license": "MIT"
 }
