@@ -5,6 +5,8 @@ Cooperative multiple inheritance for CoffeeScript, á-la Python.
 
 [![build status](https://secure.travis-ci.org/arximboldi/heterarchy.svg)]
 (https://travis-ci.org/arximboldi/heterarchy)
+[![npm version](https://badge.fury.io/js/heterarchy.svg)]
+(http://badge.fury.io/js/heterarchy)
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
