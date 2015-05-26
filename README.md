@@ -18,7 +18,9 @@ in a linear order, solving the diamond problem and allowing for
 [cooperative methods](http://www.artima.com/weblogs/viewpost.jsp?thread=281127). For
 example, the following class heterarchy:
 
-<div style="text-align:center">![diamond](pic/diamond.svg)</div>
+<div style="text-align:center">
+  <img src="https://cdn.rawgit.com/arximboldi/heterarchy/master/pic/diamond.svg"/>
+</div>
 
 Can be implemented with the following code.
 
