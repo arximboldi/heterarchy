@@ -22,11 +22,13 @@ C3 algorithm. Limitations of the approach are:
 
 - `instanceof` does not always work as expected. For example:
 
+  > ```coffee
   > class A
   > class B extends A
   > class C extends A
   > class D extends multi B, C
   > assert new D not instanceof B
+  > ```
 
   Instead, one should use the provided `isinstance` function.
 
@@ -35,8 +37,13 @@ C3 algorithm. Limitations of the approach are:
   superclass are not visible to the subclass or its instances.  For
   example, in the previous heterarchy:
 
+  > ```coffee
   > B::newProperty = 42
   > assert D::newProperty == undefined
+  > ```
+
+The `multi` function memoizes its results such that identity is
+maintained, implying `multi X, Y is multi X, Y`.
 
     exports.multi = (bases...) ->
         generate merge map(bases, mro).concat [bases]
@@ -112,19 +119,23 @@ Introspection
 The **mro** function returns the method resolution order
 (linearization) of a given class:
 
+> ```coffee
 > class A
 > class B extends A
 > class C extends B
 > assert mro(C).equals [C, B, A]
+> ```
 
 It returns the original classes that were mixed in when used with
 mult-inherited classes:
 
+> ```coffee
 > class A
 > class B extends A
 > class C extends A
 > class D extends multi B, C
 > assert mro(D).equals [D, B, C, A, Object]
+> ```
 
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
@@ -137,15 +148,19 @@ mult-inherited classes:
 The **inherited** function returns the CoffeeScript superclass of an
 object, for example:
 
+> ```coffee
 > class A
 > class B extends A
 > assert inherited(B) == A
+> ```
 
 Note that for multiple inherited classes, this returns the mixed
 object, not the next class in the MRO, as in:
 
+> ```coffee
 > class C extends multi A, B
 > assert inherited(C) == multi(A, B)
+> ```
 
     exports.inherited = inherited = (cls) ->
         Object.getPrototypeOf(cls.prototype)?.constructor
@@ -155,6 +170,7 @@ given class, including the class itself.  For multiple inherited
 classes, it may return speciall classes that were generated to produce
 the flattening, as in:
 
+> ```coffee
 > class A
 > class B extends A
 > class C extends A
@@ -162,6 +178,7 @@ the flattening, as in:
 > assert not mro(D).equals hierarchy(D)
 > assert hierarchy(D).equals
 >     [ D, multi(B, C), inherited(multi B, C), A, Object ]
+> ```
 
     exports.hierarchy = hierarchy = (cls) ->
         if not cls?
