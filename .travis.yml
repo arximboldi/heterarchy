@@ -4,7 +4,8 @@ node_js:
 before_script:
 - npm install
 script:
-- npm test
+- npm run-script test-coverage
+after_script: "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
 deploy:
   provider: npm
   email: raskolnikov@gnu.org

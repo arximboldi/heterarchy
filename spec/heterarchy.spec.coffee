@@ -9,7 +9,7 @@
 describe 'heterarchy', ->
 
     {multi, mro, hierarchy, inherited, isinstance, issubclass} =
-        require '../heterarchy'
+        require '../lib/heterarchy'
 
     # Hierarchies to test
     # -------------------
