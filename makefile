@@ -8,7 +8,7 @@ NODE_BIN   = node_modules/.bin
 NODEJS     = node
 COFFEE     = $(NODE_BIN)/coffee
 DOCCO      = $(NODE_BIN)/docco
-JASMINE    = $(NODE_BIN)/jasmine-node
+MOCHA      = $(NODE_BIN)/mocha
 ISTANBUL   = $(NODE_BIN)/istanbul
 
 SCRIPTS    = \
@@ -28,6 +28,7 @@ doc: $(DOCS)
 	cp -r ./pic ./doc/
 
 .SECONDARY:
+.PHONY: test
 
 lib/%.js: %.litcoffee
 	@mkdir -p $(@D)
@@ -68,10 +69,12 @@ clean:
 	find . -name "*~" -exec rm -f {} \;
 
 test:
-	$(JASMINE) --verbose --coffee spec
+	$(MOCHA) --compilers coffee:coffee-script/register
 
 test-coverage:
-	$(ISTANBUL) cover --root ./lib $(JASMINE) spec -- --verbose --coffee
+	$(MOCHA) --compilers coffee:coffee-script/register \
+		 --require coffee-coverage/register-istanbul
+	$(ISTANBUL) report text lcov
 
 upload-doc: doc
 	ncftpput -R -m -u u48595320 sinusoid.es /heterarchy doc/*

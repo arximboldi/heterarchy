@@ -6,10 +6,12 @@
 # Most test heterarchies are taken from the [original C3
 # paper](http://192.220.96.201/dylan/linearization-oopsla96.html)
 
+{expect} = require 'chai'
+
 describe 'heterarchy', ->
 
     {multi, mro, hierarchy, inherited, isinstance, issubclass} =
-        require '../lib/heterarchy'
+        require '../heterarchy'
 
     # Hierarchies to test
     # -------------------
@@ -111,23 +113,23 @@ describe 'heterarchy', ->
     describe 'mro', ->
 
         it 'generates empty linearization for arbitrary object', ->
-            expect(mro {}).toEqual []
+            expect(mro {}).to.eql []
 
         it 'generates empty linearization for null object', ->
-            expect(mro undefined).toEqual []
-            expect(mro null).toEqual []
+            expect(mro undefined).to.eql []
+            expect(mro null).to.eql []
 
         it 'generates a monotonic linearization', ->
-            expect(mro Pedalo).toEqual [
+            expect(mro Pedalo).to.eql [
                 Pedalo, PedalWheelBoat, EngineLess, SmallCatamaran,
                 SmallMultiHull, DayBoat, WheelBoat, Boat, Object]
 
         it 'respects local precedence', ->
-            expect(mro NewPopupMenu).toEqual [
+            expect(mro NewPopupMenu).to.eql [
                 NewPopupMenu, Menu, PopupMixin, ChoiceWidget, Object]
 
         it 'respects the extended precedence graph', ->
-            expect(mro EditableScrollablePane).toEqual [
+            expect(mro EditableScrollablePane).to.eql [
                 EditableScrollablePane, ScrollablePane, EditablePane,
                 Pane, ScrollingMixin, EditingMixin, Object ]
 
@@ -135,66 +137,66 @@ describe 'heterarchy', ->
 
         it 'calls super properly in multi case', ->
             obj = new D
-            expect(mro D).toEqual [D, B, C, A, Object]
-            expect(obj.method()).toBe "D>B>C>A"
+            expect(mro D).to.eql [D, B, C, A, Object]
+            expect(obj.method()).to.equal "D>B>C>A"
 
         it 'calls super properly in recursive multi case', ->
             obj = new G
-            expect(mro G).toEqual [G, D, B, F, C, E, A, Object]
-            expect(obj.method()).toBe "G>D>B>F>C>E>A"
+            expect(mro G).to.eql [G, D, B, F, C, E, A, Object]
+            expect(obj.method()).to.equal "G>D>B>F>C>E>A"
 
         it 'gets constructed properly', ->
             obj = new D
-            expect(obj.d).toBe 'd'
-            expect(obj.c).toBe 'c'
-            expect(obj.b).toBe 'b'
-            expect(obj.a).toBe 'a'
+            expect(obj.d).to.equal 'd'
+            expect(obj.c).to.equal 'c'
+            expect(obj.b).to.equal 'b'
+            expect(obj.a).to.equal 'a'
 
         it 'can generates the original hierarchy when possible', ->
-            expect(hierarchy D).not.toEqual mro D
-            expect(hierarchy inherited D).not.toEqual mro(D)[1..]
-            expect(hierarchy inherited inherited D).toEqual mro(D)[2..]
+            expect(hierarchy D).not.to.eql mro D
+            expect(hierarchy inherited D).not.to.eql mro(D)[1..]
+            expect(hierarchy inherited inherited D).to.eql mro(D)[2..]
 
         it 'it memoizes generated superclasses', ->
-            expect(inherited D).toBe multi B, C
+            expect(inherited D).to.equal multi B, C
 
         it 'throws error on inconsistent hierarchy', ->
             expect(-> multi D, C, B)
-                .toThrow new Error "Inconsistent multiple inheritance"
+                .to.throw "Inconsistent multiple inheritance"
 
         it 'makes sure the next constructor after a root class', ->
             obj = new Deriv
-            expect(obj.base1).toBe 'base1'
-            expect(obj.base2).toBe 'base2'
-            expect(obj.deriv).toBe 'deriv'
+            expect(obj.base1).to.equal 'base1'
+            expect(obj.base2).to.equal 'base2'
+            expect(obj.deriv).to.equal 'deriv'
 
     describe 'isinstance', ->
 
         it 'checks the classes of an object even with multiple inheritance', ->
-            expect(isinstance new D, D).toBe true
-            expect(isinstance new D, B).toBe true
-            expect(isinstance new D, C).toBe true
-            expect(isinstance new D, A).toBe true
-            expect(isinstance new D, Object).toBe true
-            expect(isinstance new A, Object).toBe true
-            expect(isinstance new Object, A).toBe false
-            expect(isinstance new Pedalo, D).toBe false
-            expect(isinstance new Pedalo, A).toBe false
-            expect(isinstance new Pedalo, SmallCatamaran).toBe true
+            expect(isinstance new D, D).to.be.true
+            expect(isinstance new D, B).to.be.true
+            expect(isinstance new D, C).to.be.true
+            expect(isinstance new D, A).to.be.true
+            expect(isinstance new D, Object).to.be.true
+            expect(isinstance new A, Object).to.be.true
+            expect(isinstance new Object, A).to.be.false
+            expect(isinstance new Pedalo, D).to.be.false
+            expect(isinstance new Pedalo, A).to.be.false
+            expect(isinstance new Pedalo, SmallCatamaran).to.be.true
 
     describe 'issubclass', ->
 
         it 'checks the relationships of classes even with multiple inheritance', ->
-            expect(issubclass D, D).toBe true
-            expect(issubclass D, B).toBe true
-            expect(issubclass D, C).toBe true
-            expect(issubclass D, A).toBe true
-            expect(issubclass D, Object).toBe true
-            expect(issubclass A, Object).toBe true
-            expect(issubclass Object, A).toBe false
-            expect(issubclass Pedalo, D).toBe false
-            expect(issubclass Pedalo, A).toBe false
-            expect(issubclass Pedalo, SmallCatamaran).toBe true
+            expect(issubclass D, D).to.be.true
+            expect(issubclass D, B).to.be.true
+            expect(issubclass D, C).to.be.true
+            expect(issubclass D, A).to.be.true
+            expect(issubclass D, Object).to.be.true
+            expect(issubclass A, Object).to.be.true
+            expect(issubclass Object, A).to.be.false
+            expect(issubclass Pedalo, D).to.be.false
+            expect(issubclass Pedalo, A).to.be.false
+            expect(issubclass Pedalo, SmallCatamaran).to.be.true
 
 # License
 # -------
