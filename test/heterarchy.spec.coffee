@@ -6,7 +6,8 @@
 # Most test heterarchies are taken from the [original C3
 # paper](http://192.220.96.201/dylan/linearization-oopsla96.html)
 
-{expect} = require 'chai'
+chai = {expect} = require 'chai'
+do chai.should
 
 describe 'heterarchy', ->
 
@@ -113,23 +114,23 @@ describe 'heterarchy', ->
     describe 'mro', ->
 
         it 'generates empty linearization for arbitrary object', ->
-            expect(mro {}).to.eql []
+            (mro {}).should.eql []
 
         it 'generates empty linearization for null object', ->
-            expect(mro undefined).to.eql []
-            expect(mro null).to.eql []
+            (mro undefined).should.eql []
+            (mro null).should.eql []
 
         it 'generates a monotonic linearization', ->
-            expect(mro Pedalo).to.eql [
+            (mro Pedalo).should.eql [
                 Pedalo, PedalWheelBoat, EngineLess, SmallCatamaran,
                 SmallMultiHull, DayBoat, WheelBoat, Boat, Object]
 
         it 'respects local precedence', ->
-            expect(mro NewPopupMenu).to.eql [
+            (mro NewPopupMenu).should.eql [
                 NewPopupMenu, Menu, PopupMixin, ChoiceWidget, Object]
 
         it 'respects the extended precedence graph', ->
-            expect(mro EditableScrollablePane).to.eql [
+            (mro EditableScrollablePane).should.eql [
                 EditableScrollablePane, ScrollablePane, EditablePane,
                 Pane, ScrollingMixin, EditingMixin, Object ]
 
@@ -137,66 +138,66 @@ describe 'heterarchy', ->
 
         it 'calls super properly in multi case', ->
             obj = new D
-            expect(mro D).to.eql [D, B, C, A, Object]
-            expect(obj.method()).to.equal "D>B>C>A"
+            (mro D).should.eql [D, B, C, A, Object]
+            obj.method().should.equal "D>B>C>A"
 
         it 'calls super properly in recursive multi case', ->
             obj = new G
-            expect(mro G).to.eql [G, D, B, F, C, E, A, Object]
-            expect(obj.method()).to.equal "G>D>B>F>C>E>A"
+            (mro G).should.eql [G, D, B, F, C, E, A, Object]
+            obj.method().should.equal "G>D>B>F>C>E>A"
 
         it 'gets constructed properly', ->
             obj = new D
-            expect(obj.d).to.equal 'd'
-            expect(obj.c).to.equal 'c'
-            expect(obj.b).to.equal 'b'
-            expect(obj.a).to.equal 'a'
+            obj.d .should.equal 'd'
+            obj.c .should.equal 'c'
+            obj.b .should.equal 'b'
+            obj.a .should.equal 'a'
 
         it 'can generates the original hierarchy when possible', ->
-            expect(hierarchy D).not.to.eql mro D
-            expect(hierarchy inherited D).not.to.eql mro(D)[1..]
-            expect(hierarchy inherited inherited D).to.eql mro(D)[2..]
+            (hierarchy D).should.not.eql mro D
+            (hierarchy inherited D).should.not.eql mro(D)[1..]
+            (hierarchy inherited inherited D).should.eql mro(D)[2..]
 
         it 'it memoizes generated superclasses', ->
-            expect(inherited D).to.equal multi B, C
+            (inherited D).should.equal multi B, C
 
         it 'throws error on inconsistent hierarchy', ->
-            expect(-> multi D, C, B)
-                .to.throw "Inconsistent multiple inheritance"
+            (-> multi D, C, B)
+                .should.throw "Inconsistent multiple inheritance"
 
         it 'makes sure the next constructor after a root class', ->
             obj = new Deriv
-            expect(obj.base1).to.equal 'base1'
-            expect(obj.base2).to.equal 'base2'
-            expect(obj.deriv).to.equal 'deriv'
+            obj.base1 .should.equal 'base1'
+            obj.base2 .should.equal 'base2'
+            obj.deriv .should.equal 'deriv'
 
     describe 'isinstance', ->
 
         it 'checks the classes of an object even with multiple inheritance', ->
-            expect(isinstance new D, D).to.be.true
-            expect(isinstance new D, B).to.be.true
-            expect(isinstance new D, C).to.be.true
-            expect(isinstance new D, A).to.be.true
-            expect(isinstance new D, Object).to.be.true
-            expect(isinstance new A, Object).to.be.true
-            expect(isinstance new Object, A).to.be.false
-            expect(isinstance new Pedalo, D).to.be.false
-            expect(isinstance new Pedalo, A).to.be.false
-            expect(isinstance new Pedalo, SmallCatamaran).to.be.true
+            (isinstance new D, D).should.be.true
+            (isinstance new D, B).should.be.true
+            (isinstance new D, C).should.be.true
+            (isinstance new D, A).should.be.true
+            (isinstance new D, Object).should.be.true
+            (isinstance new A, Object).should.be.true
+            (isinstance new Object, A).should.be.false
+            (isinstance new Pedalo, D).should.be.false
+            (isinstance new Pedalo, A).should.be.false
+            (isinstance new Pedalo, SmallCatamaran).should.be.true
 
     describe 'issubclass', ->
 
         it 'checks the relationships of classes even with multiple inheritance', ->
-            expect(issubclass D, D).to.be.true
-            expect(issubclass D, B).to.be.true
-            expect(issubclass D, C).to.be.true
-            expect(issubclass D, A).to.be.true
-            expect(issubclass D, Object).to.be.true
-            expect(issubclass A, Object).to.be.true
-            expect(issubclass Object, A).to.be.false
-            expect(issubclass Pedalo, D).to.be.false
-            expect(issubclass Pedalo, A).to.be.false
-            expect(issubclass Pedalo, SmallCatamaran).to.be.true
+            (issubclass D, D).should.be.true
+            (issubclass D, B).should.be.true
+            (issubclass D, C).should.be.true
+            (issubclass D, A).should.be.true
+            (issubclass D, Object).should.be.true
+            (issubclass A, Object).should.be.true
+            (issubclass Object, A).should.be.false
+            (issubclass Pedalo, D).should.be.false
+            (issubclass Pedalo, A).should.be.false
+            (issubclass Pedalo, SmallCatamaran).should.be.true
 
 # License
 # -------
