@@ -7,7 +7,7 @@
 # paper](http://192.220.96.201/dylan/linearization-oopsla96.html)
 
 chai = {expect} = require 'chai'
-do chai.should
+should = do chai.should
 
 describe 'heterarchy', ->
 
@@ -96,10 +96,13 @@ describe 'heterarchy', ->
     # context.
 
     class Base1
+        classProperty: 42
         constructor: ->
             @base1 = 'base1'
 
     class Base2
+        classProperty: ->
+            'something'
         constructor: ->
             @base2 = 'base2'
 
@@ -170,6 +173,33 @@ describe 'heterarchy', ->
             obj.base1 .should.equal 'base1'
             obj.base2 .should.equal 'base2'
             obj.deriv .should.equal 'deriv'
+
+        it 'allows access class properties', ->
+            obj = new Deriv
+            obj.classProperty .should.equal 42
+
+        it 'allows class properties to be set via object', ->
+            obj = new Deriv
+            obj.classProperty = 12
+            obj.classProperty .should.equal 12
+            Deriv::classProperty .should.equal 42
+
+        describe 'freezes class properties', ->
+            # This is just a limitation of the approach and these
+            # tests are here to document it.  Ideally we would get rid
+            # of it in the future.
+            it 'makes changes invisible to children', ->
+                obj = new Deriv
+                Base1::classProperty = 12
+                Deriv::classProperty .should.equal 42
+                obj.classProperty .should.equal 42
+
+            it 'makes new properties invisible to children', ->
+                obj = new Deriv
+                Base1::newClassProperty = 'sth'
+                should.not.exist Deriv::newClassProperty
+                should.not.exist obj.newClassProperty
+
 
     describe 'isinstance', ->
 
