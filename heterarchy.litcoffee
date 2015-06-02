@@ -137,11 +137,26 @@ mult-inherited classes:
 > assert mro(D).equals [D, B, C, A, Object]
 > ```
 
+    isJavaScriptClass = (cls) ->
+        return cls in [
+            Array
+            Boolean
+            Date
+            Error
+            Function
+            Number
+            RegExp
+            String
+            Object
+        ]
+
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
             []
         else if not cls::hasOwnProperty '__mro__'
-            cls::__mro__ = [cls].concat mro inherited(cls)
+            result = [cls].concat mro inherited(cls)
+            cls::__mro__ = result unless isJavaScriptClass cls
+            result
         else
             cls::__mro__
 

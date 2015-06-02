@@ -184,6 +184,13 @@ describe 'heterarchy', ->
             obj.classProperty .should.equal 12
             Deriv::classProperty .should.equal 42
 
+        it 'does not polute core classes', ->
+            should.not.exist Object::__mro__
+            should.not.exist Function::__mro__
+            should.not.exist Number::__mro__
+            should.not.exist Boolean::__mro__
+            should.not.exist String::__mro__
+
         describe 'freezes class properties', ->
             # This is just a limitation of the approach and these
             # tests are here to document it.  Ideally we would get rid
