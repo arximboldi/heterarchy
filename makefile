@@ -6,6 +6,7 @@
 NODE_BIN   = node_modules/.bin
 
 NODEJS     = node
+NPM        = npm
 COFFEE     = $(NODE_BIN)/coffee
 DOCCO      = $(NODE_BIN)/docco
 MOCHA      = $(NODE_BIN)/mocha
@@ -67,6 +68,9 @@ clean:
 	rm -rf ./doc
 	rm -rf ./lib
 	find . -name "*~" -exec rm -f {} \;
+
+install:
+	$(NPM) install
 
 test:
 	$(MOCHA) --compilers coffee:coffee-script/register
