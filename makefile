@@ -18,7 +18,7 @@ SCRIPTS    = \
 DOCS       = \
 	doc/index.html \
 	doc/heterarchy.html \
-	doc/spec/heterarchy.spec.html
+	doc/test/heterarchy.spec.html
 
 
 all: $(SCRIPTS)

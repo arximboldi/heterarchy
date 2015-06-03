@@ -3,12 +3,9 @@ heterarchy
 
 Cooperative multiple inheritance for CoffeeScript, à-la Python.
 
-[![npm version](https://badge.fury.io/js/heterarchy.svg)]
-(http://badge.fury.io/js/heterarchy)
-[![build status](https://secure.travis-ci.org/arximboldi/heterarchy.svg)]
-(https://travis-ci.org/arximboldi/heterarchy)
-[![coverage Status](https://coveralls.io/repos/arximboldi/heterarchy/badge.svg)]
-(https://coveralls.io/r/arximboldi/heterarchy)
+<a href="http://badge.fury.io/js/heterarchy"><img src="https://badge.fury.io/js/heterarchy.svg"/></a>
+<a href="https://travis-ci.org/arximboldi/heterarchy"><img src="https://travis-ci.org/arximboldi/heterarchy.svg"/></a>
+<a href="https://coveralls.io/r/arximboldi/heterarchy"><img src="https://coveralls.io/repos/arximboldi/heterarchy/badge.svg"/></a>
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
@@ -58,10 +55,10 @@ Documentation
 ### Tests
 
 * [spec.heterarchy][spec.heterarchy]
-  <br/>GitHub: [heterarchy.spec.coffee](https://github.com/arximboldi/heterarchy/blob/master/spec/heterarchy.spec.coffee)
+  <br/>GitHub: [heterarchy.spec.coffee](https://github.com/arximboldi/heterarchy/blob/master/test/heterarchy.spec.coffee)
 
-  [heterarchy]: heterarchy.html
-  [spec.heterarchy]: spec/heterarchy.html
+  [heterarchy]: http://sinusoid.es/heterarchy/heterarchy.html
+  [spec.heterarchy]: http://sinusoid.es/heterarchy/test/heterarchy.spec.html
 
 Installation
 ------------

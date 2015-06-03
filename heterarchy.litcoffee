@@ -1,6 +1,10 @@
 heterarchy
 ==========
 
+> This file is part of [Heterarchy](http://sinusoid.es/heterarchy).
+> - **View me [on a static web](http://sinusoid.es/heterarchy/heterarchy.html)**
+> - **View me [on GitHub](https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee)**
+
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
 Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).

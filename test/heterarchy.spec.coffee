@@ -1,6 +1,10 @@
 # spec.heterarchy
 # ===============
 #
+# > This file is part of [Heterarchy](http://sinusoid.es/heterarchy).
+# > - **View me [on a static web](http://sinusoid.es/heterarchy/test/heterarchy.spec.html)**
+# > - **View me [on GitHub](https://github.com/arximboldi/heterarchy/blob/master/test/heterarchy.spec.litcoffee)**
+#
 # Tests for multiple inheritance support.
 #
 # Most test heterarchies are taken from the [original C3
