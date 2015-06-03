@@ -1,7 +1,7 @@
 heterarchy
 ==========
 
-Cooperative multiple inheritance for CoffeeScript, á-la Python.
+Cooperative multiple inheritance for CoffeeScript, à-la Python.
 
 [![npm version](https://badge.fury.io/js/heterarchy.svg)]
 (http://badge.fury.io/js/heterarchy)
