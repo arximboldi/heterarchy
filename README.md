@@ -3,10 +3,10 @@ heterarchy
 
 Cooperative multiple inheritance for CoffeeScript, á-la Python.
 
-[![build status](https://secure.travis-ci.org/arximboldi/heterarchy.svg)]
-(https://travis-ci.org/arximboldi/heterarchy)
 [![npm version](https://badge.fury.io/js/heterarchy.svg)]
 (http://badge.fury.io/js/heterarchy)
+[![build status](https://secure.travis-ci.org/arximboldi/heterarchy.svg)]
+(https://travis-ci.org/arximboldi/heterarchy)
 [![coverage Status](https://coveralls.io/repos/arximboldi/heterarchy/badge.svg)]
 (https://coveralls.io/r/arximboldi/heterarchy)
 
