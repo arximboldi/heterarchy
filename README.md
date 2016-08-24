@@ -41,7 +41,7 @@ class D extends multi B, C
     method: -> "D > #{super}"
 ```
 
-Calling `method` on a `D` instance would return the string `D > C > B > A`
+Calling `method` on a `D` instance would return the string `D > B > C > A`
 showing the class linearization.
 
 Documentation
