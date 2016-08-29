@@ -10,12 +10,11 @@ It uses the C3 linearization algorithm as described in the [famous
 Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
 
     {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
-     partial, isEqual} =
-        require 'underscore'
+     partial, isEqual, reduce} = require 'underscore'
 
-    assert = (value, error=undefined) ->
+    assert = (value, error) ->
         if not value
-           throw new Error(if error? then error else "Assertion failed")
+            throw new Error(if error? then error else "Assertion failed")
 
 Multiple inheritance
 --------------------
@@ -61,7 +60,7 @@ behaves like a class that would be have such a hierarchy.
         if isEqual linearization, hierarchy next
             next
         else
-            class result extends generate tail linearization
+            class Result extends generate tail linearization
                 __mro__: linearization
                 constructor: reparent next, @, next::constructor
                 copyOwn next, @
@@ -91,7 +90,7 @@ it in the later.
     reparent = (oldklass, newklass, value) ->
         if value not instanceof Function
             value
-        else if value == oldklass::constructor and inherited(oldklass) == Object
+        else if value is oldklass::constructor and inherited(oldklass) is Object
             superctor = inherited(newklass)::constructor
             ->
                 superctor.apply @, arguments
@@ -141,18 +140,56 @@ mult-inherited classes:
 > assert mro(D).equals [D, B, C, A, Object]
 > ```
 
+    javaScriptClassNames = [
+        "Array"
+        "Boolean"
+        "Date"
+        "Error"
+        "Function"
+        "Number"
+        "RegExp"
+        "String"
+        "Object"
+        "EvalError"
+        "RangeError"
+        "ReferenceError"
+        "SyntaxError"
+        "TypeError"
+        "URIError"
+        # non-standard classes
+        "Symbol"
+        # typed arrays
+        "Int8Array"
+        "Uint8Array"
+        "Uint8ClampedArray"
+        "Int16Array"
+        "Uint16Array"
+        "Int32Array"
+        "Uint32Array"
+        "Float32Array"
+        "Float64Array"
+        # keyed Keyed collections
+        "Map"
+        "Set"
+        "WeakMap"
+        "WeakSet"
+        # Structured data
+        "ArrayBuffer"
+        "DataView"
+        # Control abstraction objects
+        "Promise"
+        "Generator"
+        "GeneratorFunction"
+        # Reflection
+        "Reflect"
+        "Proxy"
+    ]
+    javaScriptClasses = reduce javaScriptClassNames, (classes, name) ->
+        classes[global[name]] = global[name]
+        classes
+    , {}
     isJavaScriptClass = (cls) ->
-        return cls in [
-            Array
-            Boolean
-            Date
-            Error
-            Function
-            Number
-            RegExp
-            String
-            Object
-        ]
+        javaScriptClasses[cls] is cls
 
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?

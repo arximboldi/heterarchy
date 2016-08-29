@@ -195,6 +195,13 @@ describe 'heterarchy', ->
             should.not.exist Boolean::__mro__
             should.not.exist String::__mro__
 
+            if typeof Promise isnt "undefined"
+                should.not.exist Promise::__mro__
+            if typeof Map isnt "undefined"
+                should.not.exist Map::__mro__
+            if typeof Set isnt "undefined"
+                should.not.exist Set::__mro__
+
         describe 'freezes class properties', ->
             # This is just a limitation of the approach and these
             # tests are here to document it.  Ideally we would get rid
