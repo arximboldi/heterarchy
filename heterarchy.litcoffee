@@ -10,12 +10,11 @@ It uses the C3 linearization algorithm as described in the [famous
 Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
 
     {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
-     partial, isEqual} =
-        require 'underscore'
+     partial, isEqual, reduce} = require 'underscore'
 
     assert = (value, error) ->
         if not value
-           throw new Error(if error? then error else "Assertion failed")
+            throw new Error(if error? then error else "Assertion failed")
 
 Multiple inheritance
 --------------------
@@ -141,65 +140,56 @@ mult-inherited classes:
 > assert mro(D).equals [D, B, C, A, Object]
 > ```
 
+    javaScriptClassNames = [
+        "Array"
+        "Boolean"
+        "Date"
+        "Error"
+        "Function"
+        "Number"
+        "RegExp"
+        "String"
+        "Object"
+        "EvalError"
+        "RangeError"
+        "ReferenceError"
+        "SyntaxError"
+        "TypeError"
+        "URIError"
+        # non-standard classes
+        "Symbol"
+        # typed arrays
+        "Int8Array"
+        "Uint8Array"
+        "Uint8ClampedArray"
+        "Int16Array"
+        "Uint16Array"
+        "Int32Array"
+        "Uint32Array"
+        "Float32Array"
+        "Float64Array"
+        # keyed Keyed collections
+        "Map"
+        "Set"
+        "WeakMap"
+        "WeakSet"
+        # Structured data
+        "ArrayBuffer"
+        "DataView"
+        # Control abstraction objects
+        "Promise"
+        "Generator"
+        "GeneratorFunction"
+        # Reflection
+        "Reflect"
+        "Proxy"
+    ]
+    javaScriptClasses = reduce javaScriptClassNames, (classes, name) ->
+        classes[global[name]] = global[name]
+        classes
+    , {}
     isJavaScriptClass = (cls) ->
-        if cls.hasOwnProperty("__isNative__")
-            return cls.__isNative__
-
-        standardClasses = [
-            Array
-            Boolean
-            Date
-            Error
-            Function
-            Number
-            RegExp
-            String
-            Object
-            EvalError
-            RangeError
-            ReferenceError
-            SyntaxError
-            TypeError
-            URIError
-        ]
-
-        isNative = false
-        if cls in standardClasses
-            isNative = true
-        else
-            # according to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
-            nonStandardClasses = [
-                "Symbol"
-                # typed arrays
-                "Int8Array"
-                "Uint8Array"
-                "Uint8ClampedArray"
-                "Int16Array"
-                "Uint16Array"
-                "Int32Array"
-                "Uint32Array"
-                "Float32Array"
-                "Float64Array"
-                # keyed Keyed collections
-                "Map"
-                "Set"
-                "WeakMap"
-                "WeakSet"
-                # Structured data
-                "ArrayBuffer"
-                "DataView"
-                # Control abstraction objects
-                "Promise"
-                "Generator"
-                "GeneratorFunction"
-                # Reflection
-                "Reflect"
-                "Proxy"
-            ]
-            for nonStandardClass in nonStandardClasses when cls is global[nonStandardClass]
-                isNative = true
-        cls.__isNative__ = isNative
-        isNative
+        javaScriptClasses[cls] is cls
 
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
