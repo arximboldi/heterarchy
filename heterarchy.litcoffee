@@ -192,7 +192,7 @@ mult-inherited classes:
                 "Reflect"
                 "Proxy"
             ]
-            for nonStandardClass in nonStandardClasses when cls is window[nonStandardClass]
+            for nonStandardClass in nonStandardClasses when cls is global[nonStandardClass]
                 return true
             false
 
