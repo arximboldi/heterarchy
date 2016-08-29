@@ -13,7 +13,7 @@ Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
      partial, isEqual} =
         require 'underscore'
 
-    assert = (value, error=undefined) ->
+    assert = (value, error) ->
         if not value
            throw new Error(if error? then error else "Assertion failed")
 
@@ -61,7 +61,7 @@ behaves like a class that would be have such a hierarchy.
         if isEqual linearization, hierarchy next
             next
         else
-            class result extends generate tail linearization
+            class Result extends generate tail linearization
                 __mro__: linearization
                 constructor: reparent next, @, next::constructor
                 copyOwn next, @
@@ -91,7 +91,7 @@ it in the later.
     reparent = (oldklass, newklass, value) ->
         if value not instanceof Function
             value
-        else if value == oldklass::constructor and inherited(oldklass) == Object
+        else if value is oldklass::constructor and inherited(oldklass) is Object
             superctor = inherited(newklass)::constructor
             ->
                 superctor.apply @, arguments
@@ -142,7 +142,7 @@ mult-inherited classes:
 > ```
 
     isJavaScriptClass = (cls) ->
-        return cls in [
+        standardClasses = [
             Array
             Boolean
             Date
@@ -152,7 +152,49 @@ mult-inherited classes:
             RegExp
             String
             Object
+            EvalError
+            RangeError
+            ReferenceError
+            SyntaxError
+            TypeError
+            URIError
         ]
+
+        if cls in standardClasses
+            true
+        else
+            # according to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
+            nonStandardClasses = [
+                "Symbol"
+                # typed arrays
+                "Int8Array"
+                "Uint8Array"
+                "Uint8ClampedArray"
+                "Int16Array"
+                "Uint16Array"
+                "Int32Array"
+                "Uint32Array"
+                "Float32Array"
+                "Float64Array"
+                # keyed Keyed collections
+                "Map"
+                "Set"
+                "WeakMap"
+                "WeakSet"
+                # Structured data
+                "ArrayBuffer"
+                "DataView"
+                # Control abstraction objects
+                "Promise"
+                "Generator"
+                "GeneratorFunction"
+                # Reflection
+                "Reflect"
+                "Proxy"
+            ]
+            for nonStandardClass in nonStandardClasses when cls is window[nonStandardClass]
+                return true
+            false
 
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
