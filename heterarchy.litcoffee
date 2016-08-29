@@ -142,6 +142,9 @@ mult-inherited classes:
 > ```
 
     isJavaScriptClass = (cls) ->
+        if cls.hasOwnProperty("__isNative__")
+            return cls.__isNative__
+
         standardClasses = [
             Array
             Boolean
@@ -160,8 +163,9 @@ mult-inherited classes:
             URIError
         ]
 
+        isNative = false
         if cls in standardClasses
-            true
+            isNative = true
         else
             # according to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
             nonStandardClasses = [
@@ -193,8 +197,9 @@ mult-inherited classes:
                 "Proxy"
             ]
             for nonStandardClass in nonStandardClasses when cls is global[nonStandardClass]
-                return true
-            false
+                isNative = true
+        cls.__isNative__ = isNative
+        isNative
 
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
