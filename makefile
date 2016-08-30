@@ -85,5 +85,7 @@ test-coverage:
 		 --require coffee-coverage/register-istanbul
 	$(ISTANBUL) report text lcov
 
+travis: lint test-coverage
+
 upload-doc: doc
 	ncftpput -R -m -u u48595320 sinusoid.es /heterarchy doc/*
