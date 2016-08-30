@@ -11,6 +11,7 @@ COFFEE     = $(NODE_BIN)/coffee
 DOCCO      = $(NODE_BIN)/docco
 MOCHA      = $(NODE_BIN)/mocha
 ISTANBUL   = $(NODE_BIN)/istanbul
+COFFEELINT = $(NODE_BIN)/coffeelint
 
 SCRIPTS    = \
 	lib/heterarchy.js \
@@ -74,6 +75,10 @@ install:
 
 test:
 	$(MOCHA) --compilers coffee:coffee-script/register
+
+lint:
+	$(COFFEELINT) --literate heterarchy.litcoffee
+	$(COFFEELINT) test/heterarchy.spec.coffee
 
 test-coverage:
 	$(MOCHA) --compilers coffee:coffee-script/register \
