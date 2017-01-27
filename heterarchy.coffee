@@ -6,9 +6,6 @@ initHeterarchy = (exports) ->
         if not value
             throw new Error(if error? then error else "Assertion failed")
 
-    exports.multi = (bases...) ->
-        generate merge map(bases, mro).concat [bases]
-
     generate = memoize (linearization) ->
         next = head linearization
         if isEqual linearization, hierarchy next
@@ -64,6 +61,9 @@ initHeterarchy = (exports) ->
             String
             Object
         ]
+
+    exports.multi = (bases...) ->
+        generate merge map(bases, mro).concat [bases]
 
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
