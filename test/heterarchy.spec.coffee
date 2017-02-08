@@ -59,6 +59,7 @@ describe 'heterarchy', ->
             @a = 'a'
         method: -> "A"
         @method: -> "A"
+        @overrideNoSuper: () -> "a"
 
     class B extends A
         constructor: ->
@@ -66,6 +67,7 @@ describe 'heterarchy', ->
             @b = 'b'
         method: -> "B>#{super}"
         @method: -> "B>#{super}"
+        @overrideNoSuper: () -> "b"
 
     class C extends A
         constructor: ->
@@ -73,6 +75,7 @@ describe 'heterarchy', ->
             @c = 'c'
         method: -> "C>#{super}"
         @method: -> "C>#{super}"
+        @overrideNoSuper: () -> "c"
 
     class D extends multi B, C
         constructor: ->
@@ -80,6 +83,7 @@ describe 'heterarchy', ->
             @d = 'd'
         method: -> "D>#{super}"
         @method: -> "D>#{super}"
+        @overrideNoSuper: () -> "d"
 
     class E extends A
         constructor: ->
@@ -87,6 +91,7 @@ describe 'heterarchy', ->
             @e = 'e'
         method: -> "E>#{super}"
         @method: -> "E>#{super}"
+        @overrideNoSuper: () -> "e"
 
     class F extends multi C, E
         constructor: ->
@@ -94,6 +99,7 @@ describe 'heterarchy', ->
             @f = 'f'
         method: -> "F>#{super}"
         @method: -> "F>#{super}"
+        @overrideNoSuper: () -> "f"
 
     class G extends multi D, F
         constructor: ->
@@ -101,6 +107,7 @@ describe 'heterarchy', ->
             @g = 'g'
         method: -> "G>#{super}"
         @method: -> "G>#{super}"
+        @overrideNoSuper: () -> "g"
 
     # Hierarchy of classes where classes that only inherit from
     # `object` magically get a superclass in a multiple inheritance
@@ -162,6 +169,11 @@ describe 'heterarchy', ->
 
         it 'calls super of class methods properly in recursive multi case', ->
             G.method().should.equal "G>D>B>F>C>E>A"
+
+        it 'overrides class methods properly in recursive multi case', ->
+            # exclude Object
+            for cls in mro(G)[0...-1]
+                cls.overrideNoSuper().should.equal cls.name.toLowerCase()
 
         it 'gets constructed properly', ->
             obj = new D

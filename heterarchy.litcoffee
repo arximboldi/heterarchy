@@ -69,6 +69,7 @@ behaves like a class that would have such a hierarchy.
                 # ADJUST CLASS METHOD (so the MRO is used)
                 # copy class methods from `next` to `this` that are implemented by `next`
                 # note: this is basically the same as copyOwn but ignoring `if not to.hasOwnProperty key`
+                # This is due to the fact that when inheriting all class attributes are copied to `this` by CoffeeScript.
                 for own key, value of next when value instanceof Function
                     @[key] = partial(reparent, next, @)(value)
                 # FILL UP MISSING INSTANCE ATTRIBUTES
