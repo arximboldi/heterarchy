@@ -58,42 +58,49 @@ describe 'heterarchy', ->
         constructor: ->
             @a = 'a'
         method: -> "A"
+        @method: -> "A"
 
     class B extends A
         constructor: ->
             super
             @b = 'b'
         method: -> "B>#{super}"
+        @method: -> "B>#{super}"
 
     class C extends A
         constructor: ->
             super
             @c = 'c'
         method: -> "C>#{super}"
+        @method: -> "C>#{super}"
 
     class D extends multi B, C
         constructor: ->
             super
             @d = 'd'
         method: -> "D>#{super}"
+        @method: -> "D>#{super}"
 
     class E extends A
         constructor: ->
             super
             @e = 'e'
         method: -> "E>#{super}"
+        @method: -> "E>#{super}"
 
     class F extends multi C, E
         constructor: ->
             super
             @f = 'f'
         method: -> "F>#{super}"
+        @method: -> "F>#{super}"
 
     class G extends multi D, F
         constructor: ->
             super
             @g = 'g'
         method: -> "G>#{super}"
+        @method: -> "G>#{super}"
 
     # Hierarchy of classes where classes that only inherit from
     # `object` magically get a superclass in a multiple inheritance
@@ -143,15 +150,18 @@ describe 'heterarchy', ->
 
     describe 'multi', ->
 
-        it 'calls super properly in multi case', ->
+        it 'calls super of instance methods properly in multi case', ->
             obj = new D
             (mro D).should.eql [D, B, C, A, Object]
             obj.method().should.equal "D>B>C>A"
 
-        it 'calls super properly in recursive multi case', ->
+        it 'calls super of instance methods properly in recursive multi case', ->
             obj = new G
             (mro G).should.eql [G, D, B, F, C, E, A, Object]
             obj.method().should.equal "G>D>B>F>C>E>A"
+
+        it 'calls super of class methods properly in recursive multi case', ->
+            G.method().should.equal "G>D>B>F>C>E>A"
 
         it 'gets constructed properly', ->
             obj = new D
@@ -165,7 +175,7 @@ describe 'heterarchy', ->
             (hierarchy inherited D).should.not.eql mro(D)[1..]
             (hierarchy inherited inherited D).should.eql mro(D)[2..]
 
-        it 'it memoizes generated superclasses', ->
+        it 'memoizes generated superclasses', ->
             (inherited D).should.equal multi B, C
 
         it 'throws error on inconsistent hierarchy', ->
