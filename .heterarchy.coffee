@@ -2,9 +2,9 @@ initHeterarchy = (exports) ->
     {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
      partial, isEqual} = _
 
-    assert = (value, error) ->
+    assert = (value, errorMessage) ->
         if not value
-            throw new Error(if error? then error else "Assertion failed")
+            throw new Error(errorMessage)
 
     generate = memoize (linearization) ->
         next = head linearization

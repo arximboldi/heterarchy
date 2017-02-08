@@ -12,9 +12,9 @@ Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
     {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
      partial, isEqual, reduce} = require 'underscore'
 
-    assert = (value, error) ->
+    assert = (value, errorMessage) ->
         if not value
-            throw new Error(if error? then error else "Assertion failed")
+            throw new Error(errorMessage)
 
 Multiple inheritance
 --------------------
