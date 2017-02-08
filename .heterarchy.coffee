@@ -14,7 +14,17 @@ initHeterarchy = (exports) ->
             class Result extends generate tail linearization
                 __mro__: linearization
                 constructor: reparent next, @, next::constructor
+                # FILL UP MISSING CLASS ATTRIBUTES
+                # copy class attributes from `next` to `this` that only exist on `next`
                 copyOwn next, @
+                # ADJUST CLASS METHOD (so the MRO is used)
+                # copy class methods from `next` to `this` that are implemented by `next`
+                # note: this is basically the same as copyOwn but ignoring `if not to.hasOwnProperty key`
+                for own key, value of next when value instanceof Function
+                    @[key] = partial(reparent, next, @)(value)
+                # FILL UP MISSING INSTANCE ATTRIBUTES
+                # copy instance attributes from `next` to `this` that only exist on `next`
+                # with projection `reparent` (pre-applied `next` and `this`)
                 copyOwn next::, @::, partial reparent, next, @
 
     copyOwn = (from, to, project = (x) -> x) ->
@@ -28,13 +38,13 @@ initHeterarchy = (exports) ->
             value
         else if value is oldklass::constructor and inherited(oldklass) is Object
             superctor = inherited(newklass)::constructor
-            ->
+            () ->
                 superctor.apply @, arguments
                 value.apply @, arguments
         else
             newsuper = inherited(newklass)::
             oldsuper = oldklass.__super__
-            ->
+            () ->
                 oldklass.__super__ = newsuper
                 try
                     value.apply @, arguments

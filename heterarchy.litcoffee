@@ -53,7 +53,7 @@ maintained, implying `multi X, Y is multi X, Y`.
 
 This takes a list of classes representing a hierarchy (from most to
 least derived) and generates a single-inheritance hierarchy that
-behaves like a class that would be have such a hierarchy.
+behaves like a class that would have such a hierarchy.
 
     generate = memoize (linearization) ->
         next = head linearization
@@ -63,7 +63,17 @@ behaves like a class that would be have such a hierarchy.
             class Result extends generate tail linearization
                 __mro__: linearization
                 constructor: reparent next, @, next::constructor
+                # FILL UP MISSING CLASS ATTRIBUTES
+                # copy class attributes from `next` to `this` that only exist on `next`
                 copyOwn next, @
+                # ADJUST CLASS METHOD (so the MRO is used)
+                # copy class methods from `next` to `this` that are implemented by `next`
+                # note: this is basically the same as copyOwn but ignoring `if not to.hasOwnProperty key`
+                for own key, value of next when value instanceof Function
+                    @[key] = partial(reparent, next, @)(value)
+                # FILL UP MISSING INSTANCE ATTRIBUTES
+                # copy instance attributes from `next` to `this` that only exist on `next`
+                # with projection `reparent` (pre-applied `next` and `this`)
                 copyOwn next::, @::, partial reparent, next, @
 
 This utility lets us copy own properties of a *from* object that are
@@ -78,10 +88,10 @@ transformed via a projection function.
 
 Methods in CoffeeScript call super directly, so we have to change the
 `__super__` attribute of the original class during the scope of the
-method so it calls the right super of the linearization.  Also,
+method so it calls the right super of the linearization. Also,
 programmers don't call super in constructor of root classes --indeed
 doing so would rise an error-- so we have to inject such a call when
-there are classes after these in the linearization.  The **reparent**
+there are classes after these in the linearization. The **reparent**
 function takes care of all these and given an original class, and the
 new class that is replacing it a linearized heterarchy, returns a
 wrapped copy of a value of the former that is suitable for replacing
@@ -92,13 +102,13 @@ it in the later.
             value
         else if value is oldklass::constructor and inherited(oldklass) is Object
             superctor = inherited(newklass)::constructor
-            ->
+            () ->
                 superctor.apply @, arguments
                 value.apply @, arguments
         else
             newsuper = inherited(newklass)::
             oldsuper = oldklass.__super__
-            ->
+            () ->
                 oldklass.__super__ = newsuper
                 try
                     value.apply @, arguments
@@ -130,7 +140,7 @@ The **mro** function returns the method resolution order
 > ```
 
 It returns the original classes that were mixed in when used with
-mult-inherited classes:
+multi-inherited classes:
 
 > ```coffee
 > class A
@@ -168,7 +178,7 @@ mult-inherited classes:
         "Uint32Array"
         "Float32Array"
         "Float64Array"
-        # keyed Keyed collections
+        # Keyed collections
         "Map"
         "Set"
         "WeakMap"
@@ -223,7 +233,7 @@ object, not the next class in the MRO, as in:
 
 The **hierarchy** returns the CoffeeScript hierarchy of classes of a
 given class, including the class itself.  For multiple inherited
-classes, it may return speciall classes that were generated to produce
+classes, it may return special classes that were generated to produce
 the flattening, as in:
 
 > ```coffee
