@@ -34,11 +34,12 @@ doc: $(DOCS)
 
 lib/%.js: %.litcoffee
 	@mkdir -p $(@D)
-	$(COFFEE) -c -p $< > $@
+	$(COFFEE) --compile --print $< > $@
+	cat $< | ./browserify.py | $(COFFEE) --stdio --compile --literate --print $< > $(dir $@)/browser.$(notdir $@)
 
 lib/%.js: %.coffee
 	@mkdir -p $(@D)
-	$(COFFEE) -c -p $< > $@
+	$(COFFEE) --compile --print $< > $@
 
 lib/%.js: %.js
 	@mkdir -p $(@D)
