@@ -8,5 +8,6 @@ coffee_code = (
     "    exports = window.heterarchy = {}\n\n" +
     coffee_code
     .replace("require 'underscore'", "_")
+    .replace("global", "window")
 )
 print(coffee_code)

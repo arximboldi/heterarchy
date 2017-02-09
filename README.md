@@ -50,7 +50,7 @@ Documentation
 ### API
 
 * [heterarchy][heterarchy]
-  <br/>GitHub: [heterarchy.litcoffe](https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee)
+  <br/>GitHub: [heterarchy.litcoffee](https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee)
 
 ### Tests
 
@@ -67,6 +67,47 @@ This is a standard [Node.JS](http://nodejs.org) module. One may
 install the library with:
 
 > npm install heterarchy
+
+### In the browser
+
+After cloning or downloading the repository you can create the browser version with
+
+> make
+ 
+This will create `browser.heterarchy.js` in the `lib/` folder.
+Including the file in the browser will result in a global `heterarchy` variable that contains the normally exported functions.
+
+Since the library requires `underscorejs` you must include it before `heterarchy` - or define 
+
+```coffee
+_ = {head, tail, map, find, some, without, isEmpty, every, memoize, reject, partial, isEqual, reduce}
+```
+
+#### Example
+
+```html
+<script type="text/javascript" src="path/to/underscore.js"></script>
+<script type="text/javascript" src="path/to/browser.heterarchy.js"></script>
+<script type="text/javascript" src="my_app.coffee"></script>
+```
+
+where `my_app.coffee` could be
+
+```coffee
+class A
+    method: -> "A"
+
+class B extends A
+    method: -> "B > #{super}"
+
+class C extends A
+    method: -> "C > #{super}"
+
+# note the heterarchy namespace
+class D extends heterarchy.multi B, C
+    method: -> "D > #{super}"
+```
+
 
 License
 -------
