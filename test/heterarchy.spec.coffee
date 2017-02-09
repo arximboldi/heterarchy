@@ -134,6 +134,13 @@ describe 'heterarchy', ->
 
     describe 'mro', ->
 
+        it 'throws an error when trying to linearize non-linearizable class hierarchy', ->
+            expect () ->
+                class A
+                class B extends A
+                class C extends multi A, B
+            .to.throw(Error)
+
         it 'generates empty linearization for arbitrary object', ->
             (mro {}).should.eql []
 
@@ -160,15 +167,29 @@ describe 'heterarchy', ->
         it 'calls super of instance methods properly in multi case', ->
             obj = new D
             (mro D).should.eql [D, B, C, A, Object]
-            obj.method().should.equal "D>B>C>A"
+            obj.method().should.equal 'D>B>C>A'
 
         it 'calls super of instance methods properly in recursive multi case', ->
             obj = new G
             (mro G).should.eql [G, D, B, F, C, E, A, Object]
-            obj.method().should.equal "G>D>B>F>C>E>A"
+            obj.method().should.equal 'G>D>B>F>C>E>A'
 
         it 'calls super of class methods properly in recursive multi case', ->
-            G.method().should.equal "G>D>B>F>C>E>A"
+            # method is overridden
+            G.method().should.equal 'G>D>B>F>C>E>A'
+            # method is not overridden
+            class A
+                @classMethod: () ->
+                    return super() + 'Base1'
+
+            class B
+                @classMethod: () ->
+                    return 'Base2'
+
+            class C extends multi Base1, Base2
+
+            C.classMethod().should.equal 'Base2Base1Deriv'
+
 
         it 'overrides class methods properly in recursive multi case', ->
             # exclude Object
