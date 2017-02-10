@@ -9,7 +9,7 @@ Cooperative multiple inheritance for CoffeeScript, à-la Python.
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
-Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
+Dylan paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.19.3910&rep=rep1&type=pdf).
 
 Example
 -------
@@ -73,11 +73,11 @@ install the library with:
 After cloning or downloading the repository you can create the browser version with
 
 > make
- 
+
 This will create `browser.heterarchy.js` in the `lib/` folder.
 Including the file in the browser will result in a global `heterarchy` variable that contains the normally exported functions.
 
-Since the library requires `underscorejs` you must include it before `heterarchy` - or define 
+Since the library requires `underscorejs` you must include it before `heterarchy` - or define
 
 ```coffee
 _ = {head, tail, map, find, some, without, isEmpty, every, memoize, reject, partial, isEqual, reduce}
