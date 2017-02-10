@@ -135,10 +135,10 @@ describe 'heterarchy', ->
     describe 'mro', ->
 
         it 'throws an error when trying to linearize non-linearizable class hierarchy', ->
-            expect () ->
-                class A1
-                class B1 extends A1
-                class C1 extends multi A1, B1
+            expect (A, B, C) ->
+                class A
+                class B extends A
+                class C extends multi A, B
             .to.throw(Error)
 
         it 'generates empty linearization for arbitrary object', ->
@@ -164,32 +164,42 @@ describe 'heterarchy', ->
 
     describe 'multi', ->
 
-        it 'calls super of instance methods properly in multi case', ->
-            obj = new D
-            (mro D).should.eql [D, B, C, A, Object]
-            obj.method().should.equal 'D>B>C>A'
+        describe 'instance methods', ->
 
-        it 'calls super of instance methods properly in recursive multi case', ->
-            obj = new G
-            (mro G).should.eql [G, D, B, F, C, E, A, Object]
-            obj.method().should.equal 'G>D>B>F>C>E>A'
+            it 'calls super properly in multi case', ->
+                obj = new D()
+                (mro D).should.eql [D, B, C, A, Object]
+                obj.method().should.equal 'D>B>C>A'
 
-        it 'calls super of class methods properly in recursive multi case', ->
-            # method is overridden
-            G.method().should.equal 'G>D>B>F>C>E>A'
-            # method is not overridden
-            class A
-                @classMethod: () ->
-                    return super() + 'Base1'
+            it 'calls super properly in recursive multi case', ->
+                obj = new G()
+                (mro G).should.eql [G, D, B, F, C, E, A, Object]
+                obj.method().should.equal 'G>D>B>F>C>E>A'
 
-            class B
-                @classMethod: () ->
-                    return 'Base2'
+        describe 'class methods', ->
 
-            class C extends multi Base1, Base2
+            it 'calls super properly in multi case', ->
+                D.method().should.equal 'D>B>C>A'
 
-            C.classMethod().should.equal 'Base2Base1Deriv'
+            it 'calls super properly in recursive multi case', ->
+                # method is overridden
+                G.method().should.equal 'G>D>B>F>C>E>A'
 
+                # closure for not overwriting the value of e.g. `A`
+                ((A, B, C) ->
+                    # method is not overridden
+                    class A
+                        @classMethod: () ->
+                            return super() + 'Base1'
+
+                    class B
+                        @classMethod: () ->
+                            return 'Base2'
+
+                    class C extends multi A, B
+
+                    C.classMethod().should.equal 'Base2Base1'
+                )(0, 0, 0)
 
         it 'overrides class methods properly in recursive multi case', ->
             # exclude Object
@@ -197,7 +207,7 @@ describe 'heterarchy', ->
                 cls.overrideNoSuper().should.equal cls.name.toLowerCase()
 
         it 'gets constructed properly', ->
-            obj = new D
+            obj = new D()
             obj.d .should.equal 'd'
             obj.c .should.equal 'c'
             obj.b .should.equal 'b'
@@ -216,17 +226,17 @@ describe 'heterarchy', ->
                 .should.throw "Inconsistent multiple inheritance"
 
         it 'makes sure the next constructor after a root class', ->
-            obj = new Deriv
+            obj = new Deriv()
             obj.base1 .should.equal 'base1'
             obj.base2 .should.equal 'base2'
             obj.deriv .should.equal 'deriv'
 
         it 'allows access class properties', ->
-            obj = new Deriv
+            obj = new Deriv()
             obj.classProperty .should.equal 42
 
         it 'allows class properties to be set via object', ->
-            obj = new Deriv
+            obj = new Deriv()
             obj.classProperty = 12
             obj.classProperty .should.equal 12
             Deriv::classProperty .should.equal 42
@@ -250,13 +260,13 @@ describe 'heterarchy', ->
             # tests are here to document it.  Ideally we would get rid
             # of it in the future.
             it 'makes changes invisible to children', ->
-                obj = new Deriv
+                obj = new Deriv()
                 Base1::classProperty = 12
                 Deriv::classProperty .should.equal 42
                 obj.classProperty .should.equal 42
 
             it 'makes new properties invisible to children', ->
-                obj = new Deriv
+                obj = new Deriv()
                 Base1::newClassProperty = 'sth'
                 should.not.exist Deriv::newClassProperty
                 should.not.exist obj.newClassProperty
@@ -265,16 +275,16 @@ describe 'heterarchy', ->
     describe 'isinstance', ->
 
         it 'checks the classes of an object even with multiple inheritance', ->
-            (isinstance new D, D).should.be.true
-            (isinstance new D, B).should.be.true
-            (isinstance new D, C).should.be.true
-            (isinstance new D, A).should.be.true
-            (isinstance new D, Object).should.be.true
-            (isinstance new A, Object).should.be.true
-            (isinstance new Object, A).should.be.false
-            (isinstance new Pedalo, D).should.be.false
-            (isinstance new Pedalo, A).should.be.false
-            (isinstance new Pedalo, SmallCatamaran).should.be.true
+            (isinstance new D(), D).should.be.true
+            (isinstance new D(), B).should.be.true
+            (isinstance new D(), C).should.be.true
+            (isinstance new D(), A).should.be.true
+            (isinstance new D(), Object).should.be.true
+            (isinstance new A(), Object).should.be.true
+            (isinstance new Object(), A).should.be.false
+            (isinstance new Pedalo(), D).should.be.false
+            (isinstance new Pedalo(), A).should.be.false
+            (isinstance new Pedalo(), SmallCatamaran).should.be.true
 
     describe 'issubclass', ->
 

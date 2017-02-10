@@ -52,4 +52,169 @@
 
   })(heterarchy.multi(Base1, Base2));
 
+  window.A = (function() {
+    function A() {
+      this.a = 'a';
+    }
+
+    A.prototype.method = function() {
+      return "A";
+    };
+
+    A.method = function() {
+      return "A";
+    };
+
+    A.overrideNoSuper = function() {
+      return "a";
+    };
+
+    return A;
+
+  })();
+
+  window.B = (function(superClass) {
+    extend(B, superClass);
+
+    function B() {
+      B.__super__.constructor.apply(this, arguments);
+      this.b = 'b';
+    }
+
+    B.prototype.method = function() {
+      return "B>" + (B.__super__.method.apply(this, arguments));
+    };
+
+    B.method = function() {
+      return "B>" + (B.__super__.constructor.method.apply(this, arguments));
+    };
+
+    B.overrideNoSuper = function() {
+      return "b";
+    };
+
+    return B;
+
+  })(A);
+
+  window.C = (function(superClass) {
+    extend(C, superClass);
+
+    function C() {
+      C.__super__.constructor.apply(this, arguments);
+      this.c = 'c';
+    }
+
+    C.prototype.method = function() {
+      return "C>" + (C.__super__.method.apply(this, arguments));
+    };
+
+    C.method = function() {
+      return "C>" + (C.__super__.constructor.method.apply(this, arguments));
+    };
+
+    C.overrideNoSuper = function() {
+      return "c";
+    };
+
+    return C;
+
+  })(A);
+
+  window.D = (function(superClass) {
+    extend(D, superClass);
+
+    function D() {
+      D.__super__.constructor.apply(this, arguments);
+      this.d = 'd';
+    }
+
+    D.prototype.method = function() {
+      return "D>" + (D.__super__.method.apply(this, arguments));
+    };
+
+    D.method = function() {
+      return "D>" + (D.__super__.constructor.method.apply(this, arguments));
+    };
+
+    D.overrideNoSuper = function() {
+      return "d";
+    };
+
+    return D;
+
+  })(heterarchy.multi(B, C));
+
+  window.E = (function(superClass) {
+    extend(E, superClass);
+
+    function E() {
+      E.__super__.constructor.apply(this, arguments);
+      this.e = 'e';
+    }
+
+    E.prototype.method = function() {
+      return "E>" + (E.__super__.method.apply(this, arguments));
+    };
+
+    E.method = function() {
+      return "E>" + (E.__super__.constructor.method.apply(this, arguments));
+    };
+
+    E.overrideNoSuper = function() {
+      return "e";
+    };
+
+    return E;
+
+  })(A);
+
+  window.F = (function(superClass) {
+    extend(F, superClass);
+
+    function F() {
+      F.__super__.constructor.apply(this, arguments);
+      this.f = 'f';
+    }
+
+    F.prototype.method = function() {
+      return "F>" + (F.__super__.method.apply(this, arguments));
+    };
+
+    F.method = function() {
+      return "F>" + (F.__super__.constructor.method.apply(this, arguments));
+    };
+
+    F.overrideNoSuper = function() {
+      return "f";
+    };
+
+    return F;
+
+  })(heterarchy.multi(C, E));
+
+  window.G = (function(superClass) {
+    extend(G, superClass);
+
+    function G() {
+      G.__super__.constructor.apply(this, arguments);
+      this.g = 'g';
+    }
+
+    G.prototype.method = function() {
+      return "G>" + (G.__super__.method.apply(this, arguments));
+    };
+
+    G.method = function() {
+      return "G>" + (G.__super__.constructor.method.apply(this, arguments));
+    };
+
+    G.overrideNoSuper = function() {
+      return "g";
+    };
+
+    return G;
+
+  })(heterarchy.multi(D, F));
+
 }).call(this);
