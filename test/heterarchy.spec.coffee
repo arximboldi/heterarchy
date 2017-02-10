@@ -129,17 +129,11 @@ describe 'heterarchy', ->
             super
             @deriv = 'deriv'
 
+
     # Tests
     # -----
 
     describe 'mro', ->
-
-        it 'throws an error when trying to linearize non-linearizable class hierarchy', ->
-            expect (A, B, C) ->
-                class A
-                class B extends A
-                class C extends multi A, B
-            .to.throw(Error)
 
         it 'generates empty linearization for arbitrary object', ->
             (mro {}).should.eql []
@@ -162,6 +156,7 @@ describe 'heterarchy', ->
                 EditableScrollablePane, ScrollablePane, EditablePane,
                 Pane, ScrollingMixin, EditingMixin, Object ]
 
+
     describe 'multi', ->
 
         describe 'instance methods', ->
@@ -175,6 +170,7 @@ describe 'heterarchy', ->
                 obj = new G()
                 (mro G).should.eql [G, D, B, F, C, E, A, Object]
                 obj.method().should.equal 'G>D>B>F>C>E>A'
+
 
         describe 'class methods', ->
 
@@ -201,10 +197,10 @@ describe 'heterarchy', ->
                     C.classMethod().should.equal 'Base2Base1'
                 )(0, 0, 0)
 
-        it 'overrides class methods properly in recursive multi case', ->
-            # exclude Object
-            for cls in mro(G)[0...-1]
-                cls.overrideNoSuper().should.equal cls.name.toLowerCase()
+            it 'overrides class methods properly in recursive multi case', ->
+                # exclude Object
+                for cls in mro(G)[0...-1]
+                    cls.overrideNoSuper().should.equal cls.name.toLowerCase()
 
         it 'gets constructed properly', ->
             obj = new D()
@@ -224,6 +220,12 @@ describe 'heterarchy', ->
         it 'throws error on inconsistent hierarchy', ->
             (-> multi D, C, B)
                 .should.throw "Inconsistent multiple inheritance"
+
+            ((A, B, C) ->
+                class A
+                class B extends A
+                class C extends multi A, B)
+            .should.throw "Inconsistent multiple inheritance"
 
         it 'makes sure the next constructor after a root class', ->
             obj = new Deriv()
@@ -255,6 +257,7 @@ describe 'heterarchy', ->
             if typeof Set isnt "undefined"
                 should.not.exist Set::__mro__
 
+
         describe 'freezes class properties', ->
             # This is just a limitation of the approach and these
             # tests are here to document it.  Ideally we would get rid
@@ -285,6 +288,7 @@ describe 'heterarchy', ->
             (isinstance new Pedalo(), D).should.be.false
             (isinstance new Pedalo(), A).should.be.false
             (isinstance new Pedalo(), SmallCatamaran).should.be.true
+
 
     describe 'issubclass', ->
 
