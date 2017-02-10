@@ -77,10 +77,11 @@ After cloning or downloading the repository you can build all necessary files wi
 This will create `browser.heterarchy.js` (and `heterarchy.js`) in the `lib/` folder.
 Including that file in the browser will result in a global `heterarchy` variable that contains the normally exported functions.
 
-Since the library requires `underscorejs` you must include it before `heterarchy` - or define `_` as
+Since the library requires `underscorejs` you must include it before `heterarchy`.
+The functions that are used from `underscorejs` are (in case you don't need the entire library):
 
-```coffee
-_ = {head, tail, map, find, some, without, isEmpty, every, memoize, reject, partial, isEqual, reduce}
+```
+head, tail, map, find, some, without, isEmpty, every, memoize, reject, partial, isEqual, reduce
 ```
 
 #### Example
