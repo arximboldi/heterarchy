@@ -136,9 +136,9 @@ describe 'heterarchy', ->
 
         it 'throws an error when trying to linearize non-linearizable class hierarchy', ->
             expect () ->
-                class A
-                class B extends A
-                class C extends multi A, B
+                class A1
+                class B1 extends A1
+                class C1 extends multi A1, B1
             .to.throw(Error)
 
         it 'generates empty linearization for arbitrary object', ->
