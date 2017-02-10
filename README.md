@@ -68,16 +68,16 @@ install the library with:
 
 > npm install heterarchy
 
-### In the browser
+### Usage in the browser
 
-After cloning or downloading the repository you can create the browser version with
+After cloning or downloading the repository you can build all necessary files with
 
 > make
 
-This will create `browser.heterarchy.js` in the `lib/` folder.
-Including the file in the browser will result in a global `heterarchy` variable that contains the normally exported functions.
+This will create `browser.heterarchy.js` (and `heterarchy.js`) in the `lib/` folder.
+Including that file in the browser will result in a global `heterarchy` variable that contains the normally exported functions.
 
-Since the library requires `underscorejs` you must include it before `heterarchy` - or define
+Since the library requires `underscorejs` you must include it before `heterarchy` - or define `_` as
 
 ```coffee
 _ = {head, tail, map, find, some, without, isEmpty, every, memoize, reject, partial, isEqual, reduce}
