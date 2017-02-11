@@ -35,7 +35,7 @@ doc: $(DOCS)
 lib/%.js: %.litcoffee
 	@mkdir -p $(@D)
 	$(COFFEE) --compile --print $< > $@
-	cat $< | ./browserify.py | $(COFFEE) --stdio --compile --literate --print $< > $(dir $@)/browser.$(notdir $@)
+	cat $< | script/browserify.js | $(COFFEE) --stdio --compile --literate --print $< > $(dir $@)/browser.$(notdir $@)
 
 lib/%.js: %.coffee
 	@mkdir -p $(@D)
@@ -47,7 +47,7 @@ lib/%.js: %.js
 
 doc/index.html: README.md
 	@mkdir -p $(@D)
-	$(DOCCO) -t docco/docco.jst -c docco/docco.css  -o $(@D) $<
+	$(DOCCO) -t docco/docco.jst -c docco/docco.css -o $(@D) $<
 	mv $(@D)/README.html $@
 	cp -rf docco/public $(@D)
 
