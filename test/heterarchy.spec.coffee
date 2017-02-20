@@ -58,7 +58,7 @@ describe 'heterarchy', ->
         constructor: ->
             @a = 'a'
         method: -> "A"
-        @method: -> "A"
+        @classMethod: -> "A"
         @overrideNoSuper: -> "a"
 
     class B extends A
@@ -66,7 +66,7 @@ describe 'heterarchy', ->
             super
             @b = 'b'
         method: -> "B>#{super}"
-        @method: -> "B>#{super}"
+        @classMethod: -> "B>#{super}"
         @overrideNoSuper: -> "b"
 
     class C extends A
@@ -74,7 +74,7 @@ describe 'heterarchy', ->
             super
             @c = 'c'
         method: -> "C>#{super}"
-        @method: -> "C>#{super}"
+        @classMethod: -> "C>#{super}"
         @overrideNoSuper: -> "c"
 
     class D extends multi B, C
@@ -82,7 +82,7 @@ describe 'heterarchy', ->
             super
             @d = 'd'
         method: -> "D>#{super}"
-        @method: -> "D>#{super}"
+        @classMethod: -> "D>#{super}"
         @overrideNoSuper: -> "d"
 
     class E extends A
@@ -90,7 +90,7 @@ describe 'heterarchy', ->
             super
             @e = 'e'
         method: -> "E>#{super}"
-        @method: -> "E>#{super}"
+        @classMethod: -> "E>#{super}"
         @overrideNoSuper: -> "e"
 
     class F extends multi C, E
@@ -98,7 +98,7 @@ describe 'heterarchy', ->
             super
             @f = 'f'
         method: -> "F>#{super}"
-        @method: -> "F>#{super}"
+        @classMethod: -> "F>#{super}"
         @overrideNoSuper: -> "f"
 
     class G extends multi D, F
@@ -106,7 +106,7 @@ describe 'heterarchy', ->
             super
             @g = 'g'
         method: -> "G>#{super}"
-        @method: -> "G>#{super}"
+        @classMethod: -> "G>#{super}"
         @overrideNoSuper: -> "g"
 
     # Hierarchy of classes where classes that only inherit from
@@ -175,11 +175,11 @@ describe 'heterarchy', ->
         describe 'class methods', ->
 
             it 'calls super properly in multi case', ->
-                D.method().should.equal 'D>B>C>A'
+                D.classMethod().should.equal 'D>B>C>A'
 
             it 'calls super properly in recursive multi case', ->
                 # method is overridden
-                G.method().should.equal 'G>D>B>F>C>E>A'
+                G.classMethod().should.equal 'G>D>B>F>C>E>A'
 
                 # closure for not overwriting the value of e.g. `A`
                 do (A, B, C) ->
