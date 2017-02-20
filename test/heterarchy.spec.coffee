@@ -1,4 +1,4 @@
-# spec.heterarchy
+-># spec.heterarchy
 # ===============
 #
 # > This file is part of [Heterarchy](http://sinusoid.es/heterarchy).
@@ -59,7 +59,7 @@ describe 'heterarchy', ->
             @a = 'a'
         method: -> "A"
         @method: -> "A"
-        @overrideNoSuper: () -> "a"
+        @overrideNoSuper: -> "a"
 
     class B extends A
         constructor: ->
@@ -67,7 +67,7 @@ describe 'heterarchy', ->
             @b = 'b'
         method: -> "B>#{super}"
         @method: -> "B>#{super}"
-        @overrideNoSuper: () -> "b"
+        @overrideNoSuper: -> "b"
 
     class C extends A
         constructor: ->
@@ -75,7 +75,7 @@ describe 'heterarchy', ->
             @c = 'c'
         method: -> "C>#{super}"
         @method: -> "C>#{super}"
-        @overrideNoSuper: () -> "c"
+        @overrideNoSuper: -> "c"
 
     class D extends multi B, C
         constructor: ->
@@ -83,7 +83,7 @@ describe 'heterarchy', ->
             @d = 'd'
         method: -> "D>#{super}"
         @method: -> "D>#{super}"
-        @overrideNoSuper: () -> "d"
+        @overrideNoSuper: -> "d"
 
     class E extends A
         constructor: ->
@@ -91,7 +91,7 @@ describe 'heterarchy', ->
             @e = 'e'
         method: -> "E>#{super}"
         @method: -> "E>#{super}"
-        @overrideNoSuper: () -> "e"
+        @overrideNoSuper: -> "e"
 
     class F extends multi C, E
         constructor: ->
@@ -99,7 +99,7 @@ describe 'heterarchy', ->
             @f = 'f'
         method: -> "F>#{super}"
         @method: -> "F>#{super}"
-        @overrideNoSuper: () -> "f"
+        @overrideNoSuper: -> "f"
 
     class G extends multi D, F
         constructor: ->
@@ -107,7 +107,7 @@ describe 'heterarchy', ->
             @g = 'g'
         method: -> "G>#{super}"
         @method: -> "G>#{super}"
-        @overrideNoSuper: () -> "g"
+        @overrideNoSuper: -> "g"
 
     # Hierarchy of classes where classes that only inherit from
     # `object` magically get a superclass in a multiple inheritance
@@ -162,12 +162,12 @@ describe 'heterarchy', ->
         describe 'instance methods', ->
 
             it 'calls super properly in multi case', ->
-                obj = new D()
+                obj = new D
                 (mro D).should.eql [D, B, C, A, Object]
                 obj.method().should.equal 'D>B>C>A'
 
             it 'calls super properly in recursive multi case', ->
-                obj = new G()
+                obj = new G
                 (mro G).should.eql [G, D, B, F, C, E, A, Object]
                 obj.method().should.equal 'G>D>B>F>C>E>A'
 
@@ -185,11 +185,11 @@ describe 'heterarchy', ->
                 ((A, B, C) ->
                     # method is not overridden
                     class A
-                        @classMethod: () ->
-                            return super() + 'Base1'
+                        @classMethod: ->
+                            return super + 'Base1'
 
                     class B
-                        @classMethod: () ->
+                        @classMethod: ->
                             return 'Base2'
 
                     class C extends multi A, B
@@ -203,7 +203,7 @@ describe 'heterarchy', ->
                     cls.overrideNoSuper().should.equal cls.name.toLowerCase()
 
         it 'gets constructed properly', ->
-            obj = new D()
+            obj = new D
             obj.d .should.equal 'd'
             obj.c .should.equal 'c'
             obj.b .should.equal 'b'
@@ -228,17 +228,17 @@ describe 'heterarchy', ->
             .should.throw "Inconsistent multiple inheritance"
 
         it 'makes sure the next constructor after a root class', ->
-            obj = new Deriv()
+            obj = new Deriv
             obj.base1 .should.equal 'base1'
             obj.base2 .should.equal 'base2'
             obj.deriv .should.equal 'deriv'
 
         it 'allows access class properties', ->
-            obj = new Deriv()
+            obj = new Deriv
             obj.classProperty .should.equal 42
 
         it 'allows class properties to be set via object', ->
-            obj = new Deriv()
+            obj = new Deriv
             obj.classProperty = 12
             obj.classProperty .should.equal 12
             Deriv::classProperty .should.equal 42
@@ -263,13 +263,13 @@ describe 'heterarchy', ->
             # tests are here to document it.  Ideally we would get rid
             # of it in the future.
             it 'makes changes invisible to children', ->
-                obj = new Deriv()
+                obj = new Deriv
                 Base1::classProperty = 12
                 Deriv::classProperty .should.equal 42
                 obj.classProperty .should.equal 42
 
             it 'makes new properties invisible to children', ->
-                obj = new Deriv()
+                obj = new Deriv
                 Base1::newClassProperty = 'sth'
                 should.not.exist Deriv::newClassProperty
                 should.not.exist obj.newClassProperty
@@ -278,16 +278,16 @@ describe 'heterarchy', ->
     describe 'isinstance', ->
 
         it 'checks the classes of an object even with multiple inheritance', ->
-            (isinstance new D(), D).should.be.true
-            (isinstance new D(), B).should.be.true
-            (isinstance new D(), C).should.be.true
-            (isinstance new D(), A).should.be.true
-            (isinstance new D(), Object).should.be.true
-            (isinstance new A(), Object).should.be.true
-            (isinstance new Object(), A).should.be.false
-            (isinstance new Pedalo(), D).should.be.false
-            (isinstance new Pedalo(), A).should.be.false
-            (isinstance new Pedalo(), SmallCatamaran).should.be.true
+            (isinstance new D, D).should.be.true
+            (isinstance new D, B).should.be.true
+            (isinstance new D, C).should.be.true
+            (isinstance new D, A).should.be.true
+            (isinstance new D, Object).should.be.true
+            (isinstance new A, Object).should.be.true
+            (isinstance new Object, A).should.be.false
+            (isinstance new Pedalo, D).should.be.false
+            (isinstance new Pedalo, A).should.be.false
+            (isinstance new Pedalo, SmallCatamaran).should.be.true
 
 
     describe 'issubclass', ->

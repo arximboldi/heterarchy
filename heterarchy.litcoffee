@@ -103,13 +103,13 @@ it in the later.
             value
         else if value is oldklass::constructor and inherited(oldklass) is Object
             superctor = inherited(newklass)::constructor
-            () ->
+            ->
                 superctor.apply @, arguments
                 value.apply @, arguments
         else
             newsuper = inherited(newklass)::
             oldsuper = oldklass.__super__
-            () ->
+            ->
                 oldklass.__super__ = newsuper
                 try
                     value.apply @, arguments
