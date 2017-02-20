@@ -182,7 +182,7 @@ describe 'heterarchy', ->
                 G.method().should.equal 'G>D>B>F>C>E>A'
 
                 # closure for not overwriting the value of e.g. `A`
-                ((A, B, C) ->
+                do (A, B, C) ->
                     # method is not overridden
                     class A
                         @classMethod: ->
@@ -195,7 +195,6 @@ describe 'heterarchy', ->
                     class C extends multi A, B
 
                     C.classMethod().should.equal 'Base2Base1'
-                )(0, 0, 0)
 
             it 'overrides class methods properly in recursive multi case', ->
                 # exclude Object
