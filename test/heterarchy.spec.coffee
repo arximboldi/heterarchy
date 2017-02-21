@@ -13,13 +13,23 @@
 # Most test heterarchies are taken from the [original C3
 # paper](http://192.220.96.201/dylan/linearization-oopsla96.html)
 
-chai = {expect} = require 'chai'
+
+# node.js
+if typeof global is "object" and global?.global is global
+    chai = require 'chai'
+    heterarchy = require '../heterarchy'
+# browser
+else
+    chai = window.chai
+    heterarchy = window.heterarchy
+
+{expect} = chai
 should = do chai.should
+
 
 describe 'heterarchy', ->
 
-    {multi, mro, hierarchy, inherited, isinstance, issubclass} =
-        require '../heterarchy'
+    {multi, mro, hierarchy, inherited, isinstance, issubclass} = heterarchy
 
     # Hierarchies to test
     # -------------------

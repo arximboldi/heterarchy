@@ -12,8 +12,32 @@ Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
 Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
 
+Flexible usage
+--------------
+
+Like [Underscore.js](http://underscorejs.org/) the module can be used
+both with [Node.js](https://nodejs.org/en/) as well as in the browser.
+Therefore, global variables are set accordingly.
+
+    # node.js
+    if typeof global is "object" and global?.global is global
+        root = global
+        exports = module.exports
+        _ = require "underscore"
+    # browser
+    else
+        root = window
+        exports = window.heterarchy = {}
+        _ = window._
+
+Utilities
+---------
+
+`Underscore.js` is used to save lots of common-problem code and
+`assert` is used upon an invalid inheritance hierarchy.
+
     {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
-     isEqual, reduce} = require 'underscore'
+     isEqual, reduce} = _
 
     assert = (value, errorMessage) ->
         if not value
@@ -186,7 +210,7 @@ multi-inherited classes:
         "Proxy"
     ]
     javaScriptClasses = reduce javaScriptClassNames, (classes, name) ->
-        classes[global[name]] = global[name]
+        classes[root[name]] = root[name]
         classes
     , {}
     isJavaScriptClass = (cls) ->
@@ -195,7 +219,7 @@ multi-inherited classes:
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
             []
-        else if not cls::hasOwnProperty '__mro__'
+        else if not cls::hasOwnProperty "__mro__"
             result = [cls].concat mro inherited(cls)
             cls::__mro__ = result unless isJavaScriptClass cls
             result

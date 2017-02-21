@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>mocha-phanomtjs: heterarchy in the browser</title>
+    <script type="text/javascript" src="http://underscorejs.org/underscore.js"></script>
+    <script type="text/javascript" src="../lib/heterarchy.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" />
+</head>
+<body>
+    <div id="mocha"></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
+    <script type="text/javascript" src="http://chaijs.com/chai.js"></script>
+    <script type="text/javascript">
+        if (window.initMochaPhantomJS) {
+            window.initMochaPhantomJS();
+        }
+        mocha.ui('bdd');
+    </script>
+    <script type="text/javascript" src="./heterarchy.spec.js"></script>
+    <script type="text/javascript">
+        mocha.run();
+    </script>
+</body>
+</html>
