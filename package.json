@@ -39,6 +39,7 @@
   "scripts": {
     "test": "make test",
     "test-coverage": "make test-coverage",
+    "lint": "make lint",
     "travis": "make travis",
     "prepublish": "make",
     "pretest": "make"

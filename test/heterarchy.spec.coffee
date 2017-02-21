@@ -1,9 +1,12 @@
--># spec.heterarchy
+# spec.heterarchy
 # ===============
 #
 # > This file is part of [Heterarchy](http://sinusoid.es/heterarchy).
-# > - **View me [on a static web](http://sinusoid.es/heterarchy/test/heterarchy.spec.html)**
-# > - **View me [on GitHub](https://github.com/arximboldi/heterarchy/blob/master/test/heterarchy.spec.litcoffee)**
+# > - **View me [on a static web][sinusoid]**
+# > - **View me [on GitHub][g]**
+#
+# [sinusoid]: http://sinusoid.es/heterarchy/heterarchy.html
+# [g]: https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee
 #
 # Tests for multiple inheritance support.
 #
@@ -291,7 +294,7 @@ describe 'heterarchy', ->
 
     describe 'issubclass', ->
 
-        it 'checks the relationships of classes even with multiple inheritance', ->
+        it 'checks the relations of classes even with multiple inheritance', ->
             (issubclass D, D).should.be.true
             (issubclass D, B).should.be.true
             (issubclass D, C).should.be.true
@@ -306,22 +309,22 @@ describe 'heterarchy', ->
 # License
 # -------
 #
-# > Copyright (c) 2013, 2015 Juan Pedro Bolivar Puente <raskolnikov@gnu.org>
+# Copyright (c) 2013, 2015 Juan Pedro Bolivar Puente <raskolnikov@gnu.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 # >
-# > Permission is hereby granted, free of charge, to any person obtaining a copy
-# > of this software and associated documentation files (the "Software"), to deal
-# > in the Software without restriction, including without limitation the rights
-# > to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# > copies of the Software, and to permit persons to whom the Software is
-# > furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 # >
-# > The above copyright notice and this permission notice shall be included in
-# > all copies or substantial portions of the Software.
-# >
-# > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# > IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# > FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# > AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# > THE SOFTWARE.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
