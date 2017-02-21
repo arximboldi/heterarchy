@@ -94,7 +94,8 @@ lint:
 
 test-coverage: all
 	$(MOCHA) --compilers coffee:coffee-script/register \
-		 --require coffee-coverage/register-istanbul
+		 --require coffee-coverage/register-istanbul \
+		 `find test -name *.coffee`
 	$(ISTANBUL) report text lcov
 
 travis: lint test-coverage
