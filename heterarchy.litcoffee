@@ -63,29 +63,16 @@ behaves like a class that would have such a hierarchy.
             class Result extends generate tail linearization
                 __mro__: linearization
                 constructor: reparent next, @, next::constructor
-                # FILL UP MISSING CLASS ATTRIBUTES
-                # copy class attributes from `next` to `this` that only exist on `next`
-                copyOwn next, @
-                # ADJUST CLASS METHOD (so the MRO is used)
-                # copy class methods from `next` to `this` that are implemented by `next`
-                # note: this is basically the same as copyOwn but ignoring `if not to.hasOwnProperty key`
-                # This is due to the fact that when inheriting all class attributes are copied to `this` by CoffeeScript.
-                for own key, value of next when value instanceof Function
-                    @[key] = partial(reparent, next, @)(value)
-                # FILL UP MISSING INSTANCE ATTRIBUTES
-                # copy instance attributes from `next` to `this` that only exist on `next`
-                # with projection `reparent` (pre-applied `next` and `this`)
-                copyOwn next::, @::, partial reparent, next, @
-
-This utility lets us copy own properties of a *from* object that are
-not own properties of a *to* object into the *to* object, optionally
-transformed via a projection function.
-
-    copyOwn = (from, to, project = (x) -> x) ->
-        for own key, value of from
-            if not to.hasOwnProperty key
-                to[key] = project value
-        to
+                # 1. Fill up missing class attributes and
+                # 2. Adjust class methods (so the MRO is used).
+                #    Those are already part of the class because when extending
+                #    all class attributes are copied to `this` by CoffeeScript.
+                for own key, value of next
+                    @[key] = reparent next, @, value
+                # fill up missing instance attributes
+                for own key, value of next::
+                    if not @::hasOwnProperty key
+                        @::[key] = reparent next, @, value
 
 Methods in CoffeeScript call super directly, so we have to change the
 `__super__` attribute of the original class during the scope of the
