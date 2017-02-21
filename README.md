@@ -3,9 +3,15 @@ heterarchy
 
 Cooperative multiple inheritance for CoffeeScript, à-la Python.
 
-<a href="http://badge.fury.io/js/heterarchy"><img src="https://badge.fury.io/js/heterarchy.svg"/></a>
-<a href="https://travis-ci.org/arximboldi/heterarchy"><img src="https://travis-ci.org/arximboldi/heterarchy.svg"/></a>
-<a href="https://coveralls.io/r/arximboldi/heterarchy"><img src="https://coveralls.io/repos/arximboldi/heterarchy/badge.svg"/></a>
+<a href="http://badge.fury.io/js/heterarchy">
+    <img src="https://badge.fury.io/js/heterarchy.svg"/>
+</a>
+<a href="https://travis-ci.org/arximboldi/heterarchy">
+    <img src="https://travis-ci.org/arximboldi/heterarchy.svg"/>
+</a>
+<a href="https://coveralls.io/r/arximboldi/heterarchy">
+    <img src="https://coveralls.io/repos/arximboldi/heterarchy/badge.svg"/>
+</a>
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
@@ -70,18 +76,24 @@ install the library with:
 
 ### Usage in the browser
 
-After cloning or downloading the repository you can build all necessary files with
+After cloning or downloading the repository
+you can build all necessary files with
 
 > make
 
-This will create `browser.heterarchy.js` (and `heterarchy.js`) in the `lib/` folder.
-Including that file in the browser will result in a global `heterarchy` variable that contains the normally exported functions.
+This will create `browser.heterarchy.js` (and `heterarchy.js`)
+in the `lib/` folder.
+Including that file in the browser will result in a global
+`heterarchy` variable that contains the normally exported functions.
 
-Since the library requires `underscorejs` you must include it before `heterarchy`.
-The functions that are used from `underscorejs` are (in case you don't need the entire library):
+Since the library requires `underscorejs`
+you must include it before `heterarchy`.
+The functions that are used from `underscorejs` are
+(in case you don't need the entire library):
 
 ```
-head, tail, map, find, some, without, isEmpty, every, memoize, reject, partial, isEqual, reduce
+head, tail, map, find, some, without, isEmpty,
+every, memoize, reject, isEqual, reduce
 ```
 
 #### Example
