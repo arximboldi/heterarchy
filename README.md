@@ -81,15 +81,13 @@ you can build all necessary files with
 
 > make
 
-This will create `browser.heterarchy.js` (and `heterarchy.js`)
-in the `lib/` folder.
-Including that file in the browser will result in a global
-`heterarchy` variable that contains the normally exported functions.
+This will create `heterarchy.js` in the `lib/` folder.  Including that
+file in the browser will result in a global `heterarchy` variable that
+contains the normally exported functions.
 
-Since the library requires `underscorejs`
-you must include it before `heterarchy`.
-The functions that are used from `underscorejs` are
-(in case you don't need the entire library):
+Since the library requires `underscorejs` you must include it before
+`heterarchy`.  The functions that are used from `underscorejs` are (in
+case you don't need the entire library):
 
 ```
 head, tail, map, find, some, without, isEmpty,
@@ -121,6 +119,16 @@ class D extends heterarchy.multi B, C
     method: -> "D > #{super}"
 ```
 
+Contributors
+------------
+
+This library is maintained by [**Juanpe Bolivar**](http://sinusoid.es),
+with the help of these outstanding contributors:
+
+- **Jim Neuedorf** [@jneuendorf](https://github.com/jneuendorf)
+
+  Added support for class methods, global exports in the browser and
+  fixed various issues.
 
 License
 -------
