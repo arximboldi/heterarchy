@@ -4,6 +4,8 @@ node_js:
 before_script:
 - npm install
 script:
+- npm run-script lint
+- npm run-script test
 - npm run-script test-coverage
 after_script: "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
 deploy:

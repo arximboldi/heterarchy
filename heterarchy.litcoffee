@@ -2,19 +2,46 @@ heterarchy
 ==========
 
 > This file is part of [Heterarchy](http://sinusoid.es/heterarchy).
-> - **View me [on a static web](http://sinusoid.es/heterarchy/heterarchy.html)**
-> - **View me [on GitHub](https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee)**
+> - **View me [on a static web][sinusoid]**
+> - **View me [on GitHub][gh]**
+
+[sinusoid]: http://sinusoid.es/heterarchy/heterarchy.html
+[gh]: https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
 Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
 
-    {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
-     partial, isEqual, reduce} = require 'underscore'
+Flexible usage
+--------------
 
-    assert = (value, error) ->
+Like [Underscore.js](http://underscorejs.org/) the module can be used
+both with [Node.js](https://nodejs.org/en/) as well as in the browser.
+Therefore, global variables are set accordingly.
+
+    # node.js
+    if typeof global is "object" and global?.global is global
+        root = global
+        exports = module.exports
+        _ = require "underscore"
+    # browser
+    else
+        root = window
+        exports = window.heterarchy = {}
+        _ = window._
+
+Utilities
+---------
+
+`Underscore.js` is used to save lots of common-problem code and
+`assert` is used upon an invalid inheritance hierarchy.
+
+    {head, tail, map, find, some, without, isEmpty, every, memoize, reject,
+     isEqual, reduce} = _
+
+    assert = (value, errorMessage) ->
         if not value
-            throw new Error(if error? then error else "Assertion failed")
+            throw new Error(errorMessage)
 
 Multiple inheritance
 --------------------
@@ -53,7 +80,7 @@ maintained, implying `multi X, Y is multi X, Y`.
 
 This takes a list of classes representing a hierarchy (from most to
 least derived) and generates a single-inheritance hierarchy that
-behaves like a class that would be have such a hierarchy.
+behaves like a class that would have such a hierarchy.
 
     generate = memoize (linearization) ->
         next = head linearization
@@ -63,25 +90,23 @@ behaves like a class that would be have such a hierarchy.
             class Result extends generate tail linearization
                 __mro__: linearization
                 constructor: reparent next, @, next::constructor
-                copyOwn next, @
-                copyOwn next::, @::, partial reparent, next, @
-
-This utility lets us copy own properties of a *from* object that are
-not own properties of a *to* object into the *to* object, optionally
-transformed via a projection function.
-
-    copyOwn = (from, to, project = (x) -> x) ->
-        for own key, value of from
-            if not to.hasOwnProperty key
-                to[key] = project value
-        to
+                # 1. Fill up missing class attributes and
+                # 2. Adjust class methods (so the MRO is used).
+                #    Those are already part of the class because when extending
+                #    all class attributes are copied to `this` by CoffeeScript.
+                for own key, value of next
+                    @[key] = reparent next, @, value
+                # fill up missing instance attributes
+                for own key, value of next::
+                    if not @::hasOwnProperty key
+                        @::[key] = reparent next, @, value
 
 Methods in CoffeeScript call super directly, so we have to change the
 `__super__` attribute of the original class during the scope of the
-method so it calls the right super of the linearization.  Also,
+method so it calls the right super of the linearization. Also,
 programmers don't call super in constructor of root classes --indeed
 doing so would rise an error-- so we have to inject such a call when
-there are classes after these in the linearization.  The **reparent**
+there are classes after these in the linearization. The **reparent**
 function takes care of all these and given an original class, and the
 new class that is replacing it a linearized heterarchy, returns a
 wrapped copy of a value of the former that is suitable for replacing
@@ -130,7 +155,7 @@ The **mro** function returns the method resolution order
 > ```
 
 It returns the original classes that were mixed in when used with
-mult-inherited classes:
+multi-inherited classes:
 
 > ```coffee
 > class A
@@ -168,7 +193,7 @@ mult-inherited classes:
         "Uint32Array"
         "Float32Array"
         "Float64Array"
-        # keyed Keyed collections
+        # Keyed collections
         "Map"
         "Set"
         "WeakMap"
@@ -185,7 +210,7 @@ mult-inherited classes:
         "Proxy"
     ]
     javaScriptClasses = reduce javaScriptClassNames, (classes, name) ->
-        classes[global[name]] = global[name]
+        classes[root[name]] = root[name]
         classes
     , {}
     isJavaScriptClass = (cls) ->
@@ -194,7 +219,7 @@ mult-inherited classes:
     exports.mro = mro = (cls) ->
         if not cls? or not cls::?
             []
-        else if not cls::hasOwnProperty '__mro__'
+        else if not cls::hasOwnProperty "__mro__"
             result = [cls].concat mro inherited(cls)
             cls::__mro__ = result unless isJavaScriptClass cls
             result
@@ -223,7 +248,7 @@ object, not the next class in the MRO, as in:
 
 The **hierarchy** returns the CoffeeScript hierarchy of classes of a
 given class, including the class itself.  For multiple inherited
-classes, it may return speciall classes that were generated to produce
+classes, it may return special classes that were generated to produce
 the flattening, as in:
 
 > ```coffee

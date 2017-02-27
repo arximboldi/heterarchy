@@ -3,13 +3,19 @@ heterarchy
 
 Cooperative multiple inheritance for CoffeeScript, à-la Python.
 
-<a href="http://badge.fury.io/js/heterarchy"><img src="https://badge.fury.io/js/heterarchy.svg"/></a>
-<a href="https://travis-ci.org/arximboldi/heterarchy"><img src="https://travis-ci.org/arximboldi/heterarchy.svg"/></a>
-<a href="https://coveralls.io/r/arximboldi/heterarchy"><img src="https://coveralls.io/repos/arximboldi/heterarchy/badge.svg"/></a>
+<a href="http://badge.fury.io/js/heterarchy">
+    <img src="https://badge.fury.io/js/heterarchy.svg"/>
+</a>
+<a href="https://travis-ci.org/arximboldi/heterarchy">
+    <img src="https://travis-ci.org/arximboldi/heterarchy.svg"/>
+</a>
+<a href="https://coveralls.io/r/arximboldi/heterarchy">
+    <img src="https://coveralls.io/repos/arximboldi/heterarchy/badge.svg"/>
+</a>
 
 Adds multiple inheritance support to CoffeeScript (and JavaScript).
 It uses the C3 linearization algorithm as described in the [famous
-Dylan paper](http://192.220.96.201/dylan/linearization-oopsla96.html).
+Dylan paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.19.3910&rep=rep1&type=pdf).
 
 Example
 -------
@@ -50,7 +56,7 @@ Documentation
 ### API
 
 * [heterarchy][heterarchy]
-  <br/>GitHub: [heterarchy.litcoffe](https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee)
+  <br/>GitHub: [heterarchy.litcoffee](https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee)
 
 ### Tests
 
@@ -67,6 +73,54 @@ This is a standard [Node.JS](http://nodejs.org) module. One may
 install the library with:
 
 > npm install heterarchy
+
+### Usage in the browser
+
+After cloning or downloading the repository
+you can build all necessary files with
+
+> make
+
+This will create `browser.heterarchy.js` (and `heterarchy.js`)
+in the `lib/` folder.
+Including that file in the browser will result in a global
+`heterarchy` variable that contains the normally exported functions.
+
+Since the library requires `underscorejs`
+you must include it before `heterarchy`.
+The functions that are used from `underscorejs` are
+(in case you don't need the entire library):
+
+```
+head, tail, map, find, some, without, isEmpty,
+every, memoize, reject, isEqual, reduce
+```
+
+#### Example
+
+```html
+<script type="text/javascript" src="path/to/underscore.js"></script>
+<script type="text/javascript" src="path/to/browser.heterarchy.js"></script>
+<script type="text/javascript" src="my_app.coffee"></script>
+```
+
+where `my_app.coffee` could be
+
+```coffee
+class A
+    method: -> "A"
+
+class B extends A
+    method: -> "B > #{super}"
+
+class C extends A
+    method: -> "C > #{super}"
+
+# note the heterarchy namespace
+class D extends heterarchy.multi B, C
+    method: -> "D > #{super}"
+```
+
 
 License
 -------

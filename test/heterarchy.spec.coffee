@@ -2,21 +2,34 @@
 # ===============
 #
 # > This file is part of [Heterarchy](http://sinusoid.es/heterarchy).
-# > - **View me [on a static web](http://sinusoid.es/heterarchy/test/heterarchy.spec.html)**
-# > - **View me [on GitHub](https://github.com/arximboldi/heterarchy/blob/master/test/heterarchy.spec.litcoffee)**
+# > - **View me [on a static web][sinusoid]**
+# > - **View me [on GitHub][g]**
+#
+# [sinusoid]: http://sinusoid.es/heterarchy/heterarchy.html
+# [g]: https://github.com/arximboldi/heterarchy/blob/master/heterarchy.litcoffee
 #
 # Tests for multiple inheritance support.
 #
 # Most test heterarchies are taken from the [original C3
 # paper](http://192.220.96.201/dylan/linearization-oopsla96.html)
 
-chai = {expect} = require 'chai'
+
+# node.js
+if typeof global is "object" and global?.global is global
+    chai = require 'chai'
+    heterarchy = require '../heterarchy'
+# browser
+else
+    chai = window.chai
+    heterarchy = window.heterarchy
+
+{expect} = chai
 should = do chai.should
+
 
 describe 'heterarchy', ->
 
-    {multi, mro, hierarchy, inherited, isinstance, issubclass} =
-        require '../heterarchy'
+    {multi, mro, hierarchy, inherited, isinstance, issubclass} = heterarchy
 
     # Hierarchies to test
     # -------------------
@@ -58,42 +71,56 @@ describe 'heterarchy', ->
         constructor: ->
             @a = 'a'
         method: -> "A"
+        @classMethod: -> "A"
+        @overrideNoSuper: -> "a"
 
     class B extends A
         constructor: ->
             super
             @b = 'b'
         method: -> "B>#{super}"
+        @classMethod: -> "B>#{super}"
+        @overrideNoSuper: -> "b"
 
     class C extends A
         constructor: ->
             super
             @c = 'c'
         method: -> "C>#{super}"
+        @classMethod: -> "C>#{super}"
+        @overrideNoSuper: -> "c"
 
     class D extends multi B, C
         constructor: ->
             super
             @d = 'd'
         method: -> "D>#{super}"
+        @classMethod: -> "D>#{super}"
+        @overrideNoSuper: -> "d"
 
     class E extends A
         constructor: ->
             super
             @e = 'e'
         method: -> "E>#{super}"
+        @classMethod: -> "E>#{super}"
+        @overrideNoSuper: -> "e"
 
     class F extends multi C, E
         constructor: ->
             super
             @f = 'f'
         method: -> "F>#{super}"
+        @classMethod: -> "F>#{super}"
+        @overrideNoSuper: -> "f"
 
     class G extends multi D, F
         constructor: ->
             super
             @g = 'g'
         method: -> "G>#{super}"
+        @classMethod: -> "G>#{super}"
+        @overrideNoSuper: -> "g"
 
     # Hierarchy of classes where classes that only inherit from
     # `object` magically get a superclass in a multiple inheritance
@@ -114,6 +141,7 @@ describe 'heterarchy', ->
         constructor: ->
             super
             @deriv = 'deriv'
+
 
     # Tests
     # -----
@@ -141,17 +169,50 @@ describe 'heterarchy', ->
                 EditableScrollablePane, ScrollablePane, EditablePane,
                 Pane, ScrollingMixin, EditingMixin, Object ]
 
+
     describe 'multi', ->
 
-        it 'calls super properly in multi case', ->
-            obj = new D
-            (mro D).should.eql [D, B, C, A, Object]
-            obj.method().should.equal "D>B>C>A"
+        describe 'instance methods', ->
 
-        it 'calls super properly in recursive multi case', ->
-            obj = new G
-            (mro G).should.eql [G, D, B, F, C, E, A, Object]
-            obj.method().should.equal "G>D>B>F>C>E>A"
+            it 'calls super properly in multi case', ->
+                obj = new D
+                (mro D).should.eql [D, B, C, A, Object]
+                obj.method().should.equal 'D>B>C>A'
+
+            it 'calls super properly in recursive multi case', ->
+                obj = new G
+                (mro G).should.eql [G, D, B, F, C, E, A, Object]
+                obj.method().should.equal 'G>D>B>F>C>E>A'
+
+
+        describe 'class methods', ->
+
+            it 'calls super properly in multi case', ->
+                D.classMethod().should.equal 'D>B>C>A'
+
+            it 'calls super properly in recursive multi case', ->
+                # method is overridden
+                G.classMethod().should.equal 'G>D>B>F>C>E>A'
+
+                # closure for not overwriting the value of e.g. `A`
+                do (A, B, C) ->
+                    # method is not overridden
+                    class A
+                        @classMethod: ->
+                            return super + 'Base1'
+
+                    class B
+                        @classMethod: ->
+                            return 'Base2'
+
+                    class C extends multi A, B
+
+                    C.classMethod().should.equal 'Base2Base1'
+
+            it 'overrides class methods properly in recursive multi case', ->
+                # exclude Object
+                for cls in mro(G)[0...-1]
+                    cls.overrideNoSuper().should.equal cls.name.toLowerCase()
 
         it 'gets constructed properly', ->
             obj = new D
@@ -165,12 +226,18 @@ describe 'heterarchy', ->
             (hierarchy inherited D).should.not.eql mro(D)[1..]
             (hierarchy inherited inherited D).should.eql mro(D)[2..]
 
-        it 'it memoizes generated superclasses', ->
+        it 'memoizes generated superclasses', ->
             (inherited D).should.equal multi B, C
 
         it 'throws error on inconsistent hierarchy', ->
             (-> multi D, C, B)
                 .should.throw "Inconsistent multiple inheritance"
+
+            ((A, B, C) ->
+                class A
+                class B extends A
+                class C extends multi A, B)
+            .should.throw "Inconsistent multiple inheritance"
 
         it 'makes sure the next constructor after a root class', ->
             obj = new Deriv
@@ -201,6 +268,7 @@ describe 'heterarchy', ->
                 should.not.exist Map::__mro__
             if typeof Set isnt "undefined"
                 should.not.exist Set::__mro__
+
 
         describe 'freezes class properties', ->
             # This is just a limitation of the approach and these
@@ -233,9 +301,10 @@ describe 'heterarchy', ->
             (isinstance new Pedalo, A).should.be.false
             (isinstance new Pedalo, SmallCatamaran).should.be.true
 
+
     describe 'issubclass', ->
 
-        it 'checks the relationships of classes even with multiple inheritance', ->
+        it 'checks the relations of classes even with multiple inheritance', ->
             (issubclass D, D).should.be.true
             (issubclass D, B).should.be.true
             (issubclass D, C).should.be.true
@@ -250,22 +319,22 @@ describe 'heterarchy', ->
 # License
 # -------
 #
-# > Copyright (c) 2013, 2015 Juan Pedro Bolivar Puente <raskolnikov@gnu.org>
+# Copyright (c) 2013, 2015 Juan Pedro Bolivar Puente <raskolnikov@gnu.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 # >
-# > Permission is hereby granted, free of charge, to any person obtaining a copy
-# > of this software and associated documentation files (the "Software"), to deal
-# > in the Software without restriction, including without limitation the rights
-# > to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# > copies of the Software, and to permit persons to whom the Software is
-# > furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 # >
-# > The above copyright notice and this permission notice shall be included in
-# > all copies or substantial portions of the Software.
-# >
-# > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# > IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# > FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# > AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# > THE SOFTWARE.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.

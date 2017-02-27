@@ -1,8 +1,8 @@
-coffeelint.json
 coverage/
 doc/
 lib/
 node_modules/
 npm-debug.log
 out/
+test/heterarchy.spec.js
 tmp/

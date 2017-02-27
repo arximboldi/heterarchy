@@ -34,11 +34,13 @@
     "coveralls": "2.10.0",
     "docco": ">=0.6",
     "istanbul": "0.3.5",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "mocha-phantomjs": "^4.1.0"
   },
   "scripts": {
     "test": "make test",
     "test-coverage": "make test-coverage",
+    "lint": "make lint",
     "travis": "make travis",
     "prepublish": "make",
     "pretest": "make"
