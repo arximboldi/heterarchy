@@ -29,7 +29,11 @@ should = do chai.should
 
 describe 'heterarchy', ->
 
-    {multi, mro, hierarchy, inherited, isinstance, issubclass} = heterarchy
+    {
+        multi
+        mro, bases, hierarchy, inherited
+        isinstance, issubclass
+    } = heterarchy
 
     # Hierarchies to test
     # -------------------
@@ -170,6 +174,19 @@ describe 'heterarchy', ->
                 Pane, ScrollingMixin, EditingMixin, Object ]
 
 
+    describe 'bases', ->
+        it 'works with non-subclasses', ->
+            (bases A).should.eql []
+
+        it 'retrieves bases of single-inherited classes', ->
+            (bases B).should.eql [A]
+            (bases C).should.eql [A]
+
+        it 'retrieves bases of multi-inherited classes', ->
+            (bases D).should.eql [B, C]
+            (bases G).should.eql [D, F]
+
+
     describe 'multi', ->
 
         describe 'instance methods', ->
@@ -221,7 +238,7 @@ describe 'heterarchy', ->
             obj.b .should.equal 'b'
             obj.a .should.equal 'a'
 
-        it 'can generates the original hierarchy when possible', ->
+        it 'can generate the original hierarchy when possible', ->
             (hierarchy D).should.not.eql mro D
             (hierarchy inherited D).should.not.eql mro(D)[1..]
             (hierarchy inherited inherited D).should.eql mro(D)[2..]
@@ -245,7 +262,7 @@ describe 'heterarchy', ->
             obj.base2 .should.equal 'base2'
             obj.deriv .should.equal 'deriv'
 
-        it 'allows access class properties', ->
+        it 'allows accessing class properties', ->
             obj = new Deriv
             obj.classProperty .should.equal 42
 
