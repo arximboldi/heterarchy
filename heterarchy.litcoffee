@@ -76,7 +76,9 @@ The `multi` function memoizes its results such that identity is
 maintained, implying `multi X, Y is multi X, Y`.
 
     exports.multi = (bases...) ->
-        generate merge map(bases, mro).concat [bases]
+        cls = generate merge map(bases, mro).concat [bases]
+        cls.__bases__ = bases
+        cls
 
 This takes a list of classes representing a hierarchy (from most to
 least derived) and generates a single-inheritance hierarchy that
@@ -225,6 +227,20 @@ multi-inherited classes:
             result
         else
             cls::__mro__
+
+The *bases* function returns an array of the base- / superclasses
+of a given class. This works for single and multiple inheritance
+and classes without a superclass.
+
+    exports.bases = (cls) ->
+        # heterarchy's multiple inheritance (see `multi`)
+        if cls?.__bases__?
+            cls.__bases__
+        # CoffeeScript's single inheritance
+        else if cls?.__super__?
+            [cls.__super__.constructor]
+        else
+            []
 
 The **inherited** function returns the CoffeeScript superclass of an
 object, for example:
